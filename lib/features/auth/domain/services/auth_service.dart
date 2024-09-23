@@ -89,10 +89,9 @@ class AuthService implements AuthServiceInterface {
   }
 
   @override
-  List<MultipartBody> prepareMultiPartsBody(XFile? pickedImage, List<XFile> pickedIdentities, XFile? pickedAgreement) {
+  List<MultipartBody> prepareMultiPartsBody(XFile? pickedImage, List<XFile> pickedIdentities) {
     List<MultipartBody> multiParts = [];
     multiParts.add(MultipartBody('image', pickedImage));
-    multiParts.add(MultipartBody('agreement_document', pickedAgreement),);
     for(XFile file in pickedIdentities) {
       multiParts.add(MultipartBody('identity_image[]', file));
     }

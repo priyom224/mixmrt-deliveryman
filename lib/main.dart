@@ -28,6 +28,9 @@ Future<void> main() async {
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Detect and set base URL based on the country
+  await AppConstants.setBaseUrlBasedOnCountry();
+
   if(GetPlatform.isAndroid) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(

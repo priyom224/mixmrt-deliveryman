@@ -35,7 +35,7 @@ class AuthController extends GetxController implements GetxService {
   List<XFile> _pickedIdentities = [];
   List<XFile> get pickedIdentities => _pickedIdentities;
   
-  final List<String> _identityTypeList = ['passport', 'driving_license', 'nid'];
+  final List<String> _identityTypeList = ['nid'];
   List<String> get identityTypeList => _identityTypeList;
   
   int _identityTypeIndex = 0;
@@ -80,10 +80,14 @@ class AuthController extends GetxController implements GetxService {
   bool _acceptTerms = true;
   bool get acceptTerms => _acceptTerms;
 
+  bool _isAgreement = true;
+  bool get isAgreement => _isAgreement;
+
+  bool _isPrivacyPolicy = true;
+  bool get isPrivacyPolicy => _isPrivacyPolicy;
+
   XFile? _pickedAgreement;
   XFile? get pickedAgreement => _pickedAgreement;
-
-
 
   void initData() {
     _pickedAgreement = null;
@@ -109,7 +113,7 @@ class AuthController extends GetxController implements GetxService {
   Future<void> registerDeliveryMan(DeliveryManBodyModel deliveryManBody) async {
     _isLoading = true;
     update();
-    List<MultipartBody> multiParts = authServiceInterface.prepareMultiPartsBody(_pickedImage, _pickedIdentities, _pickedAgreement);
+    List<MultipartBody> multiParts = authServiceInterface.prepareMultiPartsBody(_pickedImage, _pickedIdentities);
     bool isSuccess = await authServiceInterface.registerDeliveryMan(deliveryManBody, multiParts);
     if (isSuccess) {
       Get.offAllNamed(RouteHelper.getSignInRoute());
@@ -150,6 +154,16 @@ class AuthController extends GetxController implements GetxService {
 
   void toggleTerms() {
     _acceptTerms = !_acceptTerms;
+    update();
+  }
+
+  void toggleAgreement() {
+    _isAgreement = !_isAgreement;
+    update();
+  }
+
+  void togglePrivacyPolicy() {
+    _isPrivacyPolicy = !_isPrivacyPolicy;
     update();
   }
 

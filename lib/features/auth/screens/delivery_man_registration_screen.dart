@@ -424,7 +424,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                         ),
                         const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
-                        Row( children: [
+                        /*Row(children: [
                           Expanded(child: CustomTextFieldWidget(
                             hintText: authController.identityTypeIndex == 0 ? 'Ex: XXXXX-XXXXXXX-X' : authController.identityTypeIndex == 1 ? 'L-XXX-XXX-XXX-XXX.' : 'XXX-XXXXX',
                             controller: _identityNumberController,
@@ -443,6 +443,14 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                             ),
                           ) : const SizedBox(),
                         ],
+                        ),
+                        const SizedBox(height: Dimensions.paddingSizeExtraLarge),*/
+
+                        CustomTextFieldWidget(
+                          hintText: authController.identityTypeIndex == 0 ? 'Ex: XXXXX-XXXXXXX-X' : authController.identityTypeIndex == 1 ? 'L-XXX-XXX-XXX-XXX.' : 'XXX-XXXXX',
+                          controller: _identityNumberController,
+                          focusNode: _identityNumberNode,
+                          inputAction: TextInputAction.done,
                         ),
                         const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
@@ -516,7 +524,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                         ),
                         const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
-                        Row(children: [
+                        /*Row(children: [
                           Expanded(flex: 10, child: Stack(children: [
                             Padding(
                               padding: const EdgeInsets.all(5.0),
@@ -554,10 +562,17 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                               ),
                             ),
                           ]),),
-                        ],),  const SizedBox(height: Dimensions.paddingSizeSmall),
+                        ],),
+                        const SizedBox(height: Dimensions.paddingSizeSmall),*/
 
-                        ConditionCheckBoxWidget(authController: authController, fromSignUp: true),
 
+                        ConditionCheckBoxWidget(authController: authController, isAgreement: true),
+                        const SizedBox(height: Dimensions.paddingSizeDefault),
+
+                        ConditionCheckBoxWidget(authController: authController),
+                        const SizedBox(height: Dimensions.paddingSizeDefault),
+
+                        ConditionCheckBoxWidget(authController: authController, isPrivacyPolicy: true),
                       ]),
                     ),
 
@@ -568,7 +583,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                   buttonText: authController.dmStatus == 0.4 ? 'next'.tr : 'submit'.tr,
                   margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
                   height: 50,
-                  onPressed:  !authController.acceptTerms ? null : () async {
+                  onPressed: (!authController.acceptTerms || !authController.isAgreement || !authController.isPrivacyPolicy) ? null : () async {
                     if(authController.dmStatus == 0.4){
                       String fName = _fNameController.text.trim();
                       String lName = _lNameController.text.trim();
@@ -642,9 +657,9 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
       showCustomSnackBar('upload_delivery_man_image'.tr);
     }else if (!phoneValid.isValid) {
       showCustomSnackBar('invalid_phone_number'.tr);
-    }else if(authController.pickedAgreement == null){
+    }/*else if(authController.pickedAgreement == null){
       showCustomSnackBar('upload_agreement_document'.tr);
-    }else if(authController.pickedIdentities.isEmpty) {
+    }*/else if(authController.pickedIdentities.isEmpty) {
       showCustomSnackBar('please_upload_identity_image'.tr);
     }else {
       authController.registerDeliveryMan(DeliveryManBodyModel(

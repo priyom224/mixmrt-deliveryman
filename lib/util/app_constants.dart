@@ -1,11 +1,15 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:sixam_mart_delivery/features/language/domain/models/language_model.dart';
 import 'package:sixam_mart_delivery/util/images.dart';
+import 'package:http/http.dart' as http;
 
 class AppConstants {
-  static const String appName = 'MIXMRT ZM Deliveryman';
+  static const String appName = 'MIXMRT Deliveryman';
   static const double appVersion = 2.8; // web version: 2.8
 
-  static const String baseUrl = 'https://mixmrt.com/zm';
+  static String baseUrl = 'https://mixmrt.com/zm';
 
   static const String configUri = '/api/v1/config';
   static const String forgetPasswordUri = '/api/v1/auth/delivery-man/forgot-password';
@@ -46,11 +50,11 @@ class AppConstants {
   static const String walletPaymentListUri = '/api/v1/delivery-man/wallet-payment-list';
   static const String makeWalletAdjustmentUri = '/api/v1/delivery-man/make-wallet-adjustment';
   static const String walletProvidedEarningListUri = '/api/v1/delivery-man/wallet-provided-earning-list';
-  static const String downloadFormUri = '$baseUrl/deliveryman/download-delivery-man-agreement';
+  static String downloadFormUri = '$baseUrl/deliveryman/download-delivery-man-agreement';
   static const String makeCollectedCashPaymentUriOffline = '/api/v1/delivery-man/make-collected-cash-payment-offline';
   static const String offlineMethodListUri = '/api/v1/offline_payment_method_list';
   static const String offlineMethodDeliveryListUri = '/api/v1/delivery-man/offline-payment-list';
-
+  static const String getAgreementUri = '/show-agreement/dm';
 
 
 
@@ -99,4 +103,50 @@ class AppConstants {
   static List<LanguageModel> languages = [
     LanguageModel(imageUrl: Images.english, languageName: 'English', countryCode: 'US', languageCode: 'en'),
   ];
+
+  static Future<void> setBaseUrlBasedOnCountry() async {
+    String? countryCode = await CountryDetector.getCountry();
+
+    if (countryCode != null) {
+      switch (countryCode) {
+        case 'MW':
+          baseUrl = 'https://mixmrt.in/mw';
+          break;
+        case 'TZ':
+          baseUrl = 'https://mixmrt.us/tz';
+          break;
+        case 'ZM':
+          baseUrl = 'https://mixmrt.uk/zm';
+          break;
+        default:
+          baseUrl = 'https://mixmrt.com/zm';
+      }
+      if (kDebugMode) {
+        print('Base URL set to: $baseUrl');
+      }
+    }
+  }
+
+}
+
+class CountryDetector {
+  static Future<String?> getCountry() async {
+    try {
+      // Get IP address information
+      final response = await http.get(Uri.parse('http://ip-api.com/json'));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (kDebugMode) {
+          print('Country_code==>>: ${data['countryCode']}');
+        }
+        return data['countryCode'];
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error detecting country: $e');
+      }
+    }
+    return null;
+  }
 }

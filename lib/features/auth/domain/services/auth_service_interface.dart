@@ -22,7 +22,7 @@ abstract class AuthServiceInterface {
   Future<bool> clearUserNumberAndPassword();
   Future<bool> registerDeliveryMan(DeliveryManBodyModel deliveryManBody, List<MultipartBody> multiParts);
   Future<List<VehicleModel>?> getVehicleList();
-  List<MultipartBody> prepareMultiPartsBody(XFile? pickedImage, List<XFile> pickedIdentities, XFile? pickedAgreement);
+  List<MultipartBody> prepareMultiPartsBody(XFile? pickedImage, List<XFile> pickedIdentities);
   List<int?> vehicleIds (List<VehicleModel>? vehicles);
   Future<XFile?> pickImageFromGallery();
 

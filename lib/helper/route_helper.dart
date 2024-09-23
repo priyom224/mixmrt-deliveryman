@@ -58,6 +58,7 @@ class RouteHelper {
   static const String walletProvidedEarning = '/wallet-provided-earning';
   static const String offlineHistory = '/offline-history';
   static const String offlinePaymentScreen = '/offline-payment-screen';
+  static const String agreement = '/agreement';
 
 
   static String getInitialRoute({bool? fromOrderDetails}) => '$initial?from_order_details=${fromOrderDetails.toString()}';
@@ -80,6 +81,7 @@ class RouteHelper {
   static String getRunningOrderRoute() => runningOrder;
   static String getTermsRoute() => terms;
   static String getPrivacyRoute() => privacy;
+  static String getAgreementRoute() => agreement;
   static String getLanguageRoute() => language;
   static String getUpdateRoute(bool isUpdate) => '$update?update=${isUpdate.toString()}';
   static String getChatRoute({required NotificationBodyModel? notificationBody, User? user, int? conversationId, bool? fromNotification}) {
@@ -145,8 +147,9 @@ class RouteHelper {
     GetPage(name: updateProfile, page: () => const UpdateProfileScreen()),
     GetPage(name: notification, page: () => NotificationScreen(fromNotification: Get.parameters['from'] == 'true')),
     GetPage(name: runningOrder, page: () => const RunningOrderScreen()),
-    GetPage(name: terms, page: () => const HtmlViewerScreen(isPrivacyPolicy: false)),
-    GetPage(name: privacy, page: () => const HtmlViewerScreen(isPrivacyPolicy: true)),
+    GetPage(name: terms, page: () => const HtmlViewerScreen(isPrivacyPolicy: false, isAgreement: false)),
+    GetPage(name: privacy, page: () => const HtmlViewerScreen(isPrivacyPolicy: true, isAgreement: false)),
+    GetPage(name: agreement, page: () => const HtmlViewerScreen(isAgreement: true, isPrivacyPolicy: false)),
     GetPage(name: language, page: () => const ChooseLanguageScreen()),
     GetPage(name: update, page: () => UpdateScreen(isUpdate: Get.parameters['update'] == 'true')),
     GetPage(name: chatScreen, page: () {
