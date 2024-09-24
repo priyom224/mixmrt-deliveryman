@@ -54,7 +54,7 @@ class AppConstants {
   static const String makeCollectedCashPaymentUriOffline = '/api/v1/delivery-man/make-collected-cash-payment-offline';
   static const String offlineMethodListUri = '/api/v1/offline_payment_method_list';
   static const String offlineMethodDeliveryListUri = '/api/v1/delivery-man/offline-payment-list';
-  static const String getAgreementUri = '/show-agreement/dm';
+  static const String getAgreementUri = '/api/v1/show-agreement/dm';
 
 
 
