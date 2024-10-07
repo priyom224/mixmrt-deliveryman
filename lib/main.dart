@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart_delivery/features/language/controllers/language_controller.dart';
 import 'package:sixam_mart_delivery/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart_delivery/common/controllers/theme_controller.dart';
@@ -27,9 +26,6 @@ Future<void> main() async {
   }
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Detect and set base URL based on the country
-  await AppConstants.setBaseUrlBasedOnCountry();
 
   if(GetPlatform.isAndroid) {
     await Firebase.initializeApp(
@@ -69,23 +65,8 @@ class MyApp extends StatelessWidget {
   final NotificationBodyModel? body;
   const MyApp({super.key, required this.languages, this.body});
 
-  void _route() {
-    Get.find<SplashController>().getConfigData().then((bool isSuccess) async {
-      if (isSuccess) {
-        if (Get.find<AuthController>().isLoggedIn()) {
-          Get.find<AuthController>().updateToken();
-        }
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    if(GetPlatform.isWeb) {
-      Get.find<SplashController>().initSharedData();
-      _route();
-    }
-
     return GetBuilder<ThemeController>(builder: (themeController) {
       return GetBuilder<LocalizationController>(builder: (localizeController) {
         return GetBuilder<SplashController>(builder: (splashController) {
