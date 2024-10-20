@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart_delivery/features/cash_in_hand/widgets/offline_list_widget.dart';
+import 'package:sixam_mart_delivery/features/cash_in_hand/widgets/transaction_details_bottom_sheet.dart';
 import 'package:sixam_mart_delivery/features/profile/controllers/profile_controller.dart';
 import 'package:sixam_mart_delivery/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart_delivery/features/cash_in_hand/controllers/cash_in_hand_controller.dart';
@@ -396,23 +397,43 @@ class _CashInHandScreenState extends State<CashInHandScreen> {
                           itemBuilder: (context, index) {
                           return Column(children: [
 
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeLarge),
-                              child: Row(children: [
-                                Expanded(
-                                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                    Text(PriceConverterHelper.convertPrice(cashInHandController.transactions![index].amount), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault), textDirection: TextDirection.ltr,),
-                                    const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                            InkWell(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  isScrollControlled: true, useRootNavigator: true, context: context,
+                                  backgroundColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(Dimensions.radiusExtraLarge),
+                                      topRight: Radius.circular(Dimensions.radiusExtraLarge),
+                                    ),
+                                  ),
+                                  builder: (context) {
+                                    return ConstrainedBox(
+                                      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+                                      child: TransactionDetailsBottomSheetWidget(transactions: cashInHandController.transactions![index], fromTransaction: true),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeLarge),
+                                child: Row(children: [
+                                  Expanded(
+                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                      Text(PriceConverterHelper.convertPrice(cashInHandController.transactions![index].amount), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault), textDirection: TextDirection.ltr,),
+                                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                                    Text('${'paid_via'.tr} ${cashInHandController.transactions![index].method?.replaceAll('_', ' ').capitalize??''}', style: robotoRegular.copyWith(
-                                      fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
-                                    )),
-                                  ]),
-                                ),
-                                Text(cashInHandController.transactions![index].paymentTime.toString(),
-                                  style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
-                                ),
-                              ]),
+                                      Text('${'paid_via'.tr} ${cashInHandController.transactions![index].method?.replaceAll('_', ' ').capitalize??''}', style: robotoRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
+                                      )),
+                                    ]),
+                                  ),
+                                  Text(cashInHandController.transactions![index].paymentTime.toString(),
+                                    style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
+                                  ),
+                                ]),
+                              ),
                             ),
 
                             const Divider(height: 1),
@@ -429,32 +450,52 @@ class _CashInHandScreenState extends State<CashInHandScreen> {
                           itemBuilder: (context, index) {
                             return Column(children: [
 
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeLarge),
-                                child: Row(children: [
-                                  Expanded(
-                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                      Text(PriceConverterHelper.convertPrice(cashInHandController.walletProvidedTransactions![index].amount), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault), textDirection: TextDirection.ltr,),
+                              InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    isScrollControlled: true, useRootNavigator: true, context: context,
+                                    backgroundColor: Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(Dimensions.radiusExtraLarge),
+                                        topRight: Radius.circular(Dimensions.radiusExtraLarge),
+                                      ),
+                                    ),
+                                    builder: (context) {
+                                      return ConstrainedBox(
+                                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+                                        child: TransactionDetailsBottomSheetWidget(transactions: cashInHandController.walletProvidedTransactions![index], fromTransaction: true),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeLarge),
+                                  child: Row(children: [
+                                    Expanded(
+                                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                        Text(PriceConverterHelper.convertPrice(cashInHandController.walletProvidedTransactions![index].amount), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault), textDirection: TextDirection.ltr,),
+                                        const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+
+                                        Text('${'wallet'.tr} ${cashInHandController.walletProvidedTransactions![index].method?.replaceAll('_', ' ').capitalize??''}', style: robotoRegular.copyWith(
+                                          fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
+                                        )),
+                                      ]),
+                                    ),
+                                    Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                                      Text(cashInHandController.walletProvidedTransactions![index].paymentTime.toString(),
+                                        style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
+                                      ),
                                       const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                                      Text('${'wallet'.tr} ${cashInHandController.walletProvidedTransactions![index].method?.replaceAll('_', ' ').capitalize??''}', style: robotoRegular.copyWith(
-                                        fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
+                                      Text(cashInHandController.walletProvidedTransactions![index].status!.tr, style: robotoRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeSmall,
+                                        color: cashInHandController.walletProvidedTransactions![index].status == 'approved' ? Theme.of(context).primaryColor : cashInHandController.walletProvidedTransactions![index].status == 'denied'
+                                            ? Theme.of(context).colorScheme.error : Colors.blue,
                                       )),
                                     ]),
-                                  ),
-                                  Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                                    Text(cashInHandController.walletProvidedTransactions![index].paymentTime.toString(),
-                                      style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
-                                    ),
-                                    const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-                                    Text(cashInHandController.walletProvidedTransactions![index].status!.tr, style: robotoRegular.copyWith(
-                                      fontSize: Dimensions.fontSizeSmall,
-                                      color: cashInHandController.walletProvidedTransactions![index].status == 'approved' ? Theme.of(context).primaryColor : cashInHandController.walletProvidedTransactions![index].status == 'denied'
-                                          ? Theme.of(context).colorScheme.error : Colors.blue,
-                                    )),
                                   ]),
-                                ]),
+                                ),
                               ),
 
                               const Divider(height: 1),

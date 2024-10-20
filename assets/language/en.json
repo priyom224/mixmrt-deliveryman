@@ -391,5 +391,14 @@
   "complete" : "Complete",
   "contact" : "Contact",
   "i_agree_with_all_the" : "I agree with all the",
-  "select_your_country" : "Select your country"
+  "select_your_country" : "Select your country",
+  "transaction_details" : "Transaction Details",
+  "transaction_id" : "Transaction ID",
+  "transaction_amount" : "Transaction Amount",
+  "transaction_status" : "Transaction Status",
+  "transaction_ref" : "Transaction Ref",
+  "transaction_time" : "Transaction Time",
+  "transaction_type" : "Transaction Type",
+  "created_by" : "Created By",
+  "transaction_note" : "Transaction Note"
 }
