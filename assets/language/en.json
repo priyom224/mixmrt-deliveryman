@@ -400,5 +400,7 @@
   "transaction_time" : "Transaction Time",
   "transaction_type" : "Transaction Type",
   "created_by" : "Created By",
-  "transaction_note" : "Transaction Note"
+  "transaction_note" : "Transaction Note",
+  "add_payment_method" : "Add Payment Method",
+  "the_request_is_send_to_the_admin_please_wait_until_admin_approval" : "The request is send to the admin. Please wait until admin approval"
 }

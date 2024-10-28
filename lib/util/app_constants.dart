@@ -7,6 +7,10 @@ class AppConstants {
 
   static String baseUrl = 'https://mixmrt.com/zm';
 
+  static void setBaseUrl(String url) {
+    baseUrl = url;
+  }
+
   static const String configUri = '/api/v1/config';
   static const String forgetPasswordUri = '/api/v1/auth/delivery-man/forgot-password';
   static const String verifyTokenUri = '/api/v1/auth/delivery-man/verify-token';
@@ -46,7 +50,7 @@ class AppConstants {
   static const String walletPaymentListUri = '/api/v1/delivery-man/wallet-payment-list';
   static const String makeWalletAdjustmentUri = '/api/v1/delivery-man/make-wallet-adjustment';
   static const String walletProvidedEarningListUri = '/api/v1/delivery-man/wallet-provided-earning-list';
-  static String downloadFormUri = '$baseUrl/deliveryman/download-delivery-man-agreement';
+  //static String downloadFormUri = '$baseUrl/deliveryman/download-delivery-man-agreement';
   static const String makeCollectedCashPaymentUriOffline = '/api/v1/delivery-man/make-collected-cash-payment-offline';
   static const String offlineMethodListUri = '/api/v1/offline_payment_method_list';
   static const String offlineMethodDeliveryListUri = '/api/v1/delivery-man/offline-payment-list';

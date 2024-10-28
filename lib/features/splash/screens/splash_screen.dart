@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sixam_mart_delivery/api/api_client.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_image_widget.dart';
 import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart_delivery/features/profile/controllers/profile_controller.dart';
@@ -110,21 +111,21 @@ class SplashScreenState extends State<SplashScreen> {
     return ['MW', 'TZ', 'ZM'].contains(countryCode);
   }
 
-  /// Set the base URL based on the detected or selected country
   void _setBaseUrl(String countryCode) {
     switch (countryCode) {
       case 'MW':
-        AppConstants.baseUrl = 'https://mixmrt.com/mw';
+        AppConstants.setBaseUrl('https://mixmrt.com/mw');
         break;
       case 'TZ':
-        AppConstants.baseUrl = 'https://mixmrt.com/tz';
+        AppConstants.setBaseUrl('https://mixmrt.com/tz');
         break;
       case 'ZM':
-        AppConstants.baseUrl = 'https://mixmrt.com/zm';
-        break;
       default:
-        AppConstants.baseUrl = 'https://mixmrt.com/zm';
+        AppConstants.setBaseUrl('https://mixmrt.com/zm');
     }
+
+    Get.find<ApiClient>().updateBaseUrl(AppConstants.baseUrl);
+
     if (kDebugMode) {
       print('Base URL set to: ${AppConstants.baseUrl}');
     }

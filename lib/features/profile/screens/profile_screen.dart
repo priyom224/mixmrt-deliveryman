@@ -92,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }),
               ) : const SizedBox(),
 
-              if(Get.find<SplashController>().configModel!.disbursementType == 'automated' && profileController.profileModel!.type != 'store_wise' && profileController.profileModel!.earnings != 0)
+              //if(Get.find<SplashController>().configModel!.disbursementType == 'automated' && profileController.profileModel!.type != 'store_wise' && profileController.profileModel!.earnings != 0)
                 Column(children: [
                   Padding(
                     padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
