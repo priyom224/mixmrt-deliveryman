@@ -726,8 +726,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                     buttonText: 'confirm'.tr, height: 40,
                     onPressed: () {
                       Get.dialog(ConfirmationDialogWidget(
-                        icon: Images.warning, title: 'are_you_sure_to_confirm'.tr,
-                        description: parcel! ? 'you_want_to_confirm_this_delivery'.tr : 'you_want_to_confirm_this_order'.tr,
+                        icon: Images.warning, title: '',
+                        description: parcel! ? 'are_you_sure_you_want_to_confirm_this_delivery'.tr : 'are_you_sure_you_want_to_confirm_this_order'.tr,
                         onYesPressed: () {
                           if((Get.find<SplashController>().configModel!.orderDeliveryVerification! || cod!) && !parcel!) {
                             orderController.updateOrderStatus(
@@ -755,8 +755,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                         orderController.initLoading();
                       }
                       Get.dialog(ConfirmationDialogWidget(
-                        icon: Images.warning, title: 'are_you_sure_to_confirm'.tr,
-                        description: parcel! ? 'you_want_to_confirm_this_delivery'.tr : 'you_want_to_confirm_this_order'.tr,
+                        icon: Images.warning, title: '',
+                        description: parcel! ? 'are_you_sure_you_want_to_confirm_this_delivery'.tr : 'are_you_sure_you_want_to_confirm_this_order'.tr,
                         onYesPressed: () {
                           orderController.updateOrderStatus(
                             controllerOrderModel, parcel! ? AppConstants.handover : AppConstants.confirmed, back: widget.fromLocationScreen? false: true,

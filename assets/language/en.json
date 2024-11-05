@@ -155,7 +155,7 @@
   "order_is_ready_for_handover": "Order is ready for handover",
   "swipe_to_confirm_order": "Swipe to confirm order",
   "swipe_to_confirm_delivery": "Swipe to confirm delivery",
-  "order_waiting_for_process": "Order is waiting for process",
+  "order_waiting_for_process": "Your order is waiting for Processing",
   "addons": "Addons",
   "variations": "Variations",
   "quantity": "Quantity",
@@ -404,5 +404,9 @@
   "transaction_note" : "Transaction Note",
   "add_payment_method" : "Add Payment Method",
   "the_request_is_send_to_the_admin_please_wait_until_admin_approval" : "The request is send to the admin. Please wait until admin approval",
-  "agreement_contract" : "Agreement/Contract"
+  "agreement_contract" : "Agreement/Contract",
+  "are_you_sure_you_want_to_accept_this_order" : "Are you sure you want to accept this order?",
+  "are_you_sure_you_want_to_accept_this_delivery" : "Are you sure you want to accept this delivery?",
+  "are_you_sure_you_want_to_confirm_this_delivery" : "Are you sure you want to confirm this delivery?",
+  "are_you_sure_you_want_to_confirm_this_order" : "Are you sure you want to confirm this order?"
 }

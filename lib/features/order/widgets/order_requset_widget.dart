@@ -236,8 +236,8 @@ class OrderRequestWidget extends StatelessWidget {
                     buttonText: 'accept'.tr,
                     fontSize: Dimensions.fontSizeDefault,
                     onPressed: () => Get.dialog(ConfirmationDialogWidget(
-                      icon: Images.warning, title: 'are_you_sure_to_accept'.tr,
-                      description: parcel ? 'you_want_to_accept_this_delivery'.tr : 'you_want_to_accept_this_order'.tr,
+                      icon: Images.warning, title: '',
+                      description: parcel ? 'are_you_sure_you_want_to_accept_this_delivery'.tr : 'are_you_sure_you_want_to_accept_this_order'.tr,
                       onYesPressed: () {
                         orderController.acceptOrder(orderModel.id, index, orderModel).then((isSuccess) {
                           if(isSuccess) {
