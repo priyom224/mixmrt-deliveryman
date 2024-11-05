@@ -223,6 +223,7 @@
   "passport": "Passport",
   "driving_license": "Driving License",
   "nid": "NID",
+  "nrc": "NRC",
   "identity_number": "Identity Number",
   "identity_images": "Identity Images",
   "submit": "Submit",
@@ -402,5 +403,6 @@
   "created_by" : "Created By",
   "transaction_note" : "Transaction Note",
   "add_payment_method" : "Add Payment Method",
-  "the_request_is_send_to_the_admin_please_wait_until_admin_approval" : "The request is send to the admin. Please wait until admin approval"
+  "the_request_is_send_to_the_admin_please_wait_until_admin_approval" : "The request is send to the admin. Please wait until admin approval",
+  "agreement_contract" : "Agreement/Contract"
 }

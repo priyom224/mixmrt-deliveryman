@@ -33,7 +33,7 @@ class ConditionCheckBoxWidget extends StatelessWidget {
               recognizer: TapGestureRecognizer()..onTap = () => isAgreement ? Get.toNamed(RouteHelper.getAgreementRoute()) :
               isPrivacyPolicy ? Get.toNamed(RouteHelper.getPrivacyRoute()) :
               Get.toNamed(RouteHelper.getTermsRoute()),
-              text:  isAgreement ? 'contact'.tr : isPrivacyPolicy ? 'privacy_policy'.tr : 'terms_conditions'.tr,
+              text:  isAgreement ? 'agreement_contract'.tr : isPrivacyPolicy ? 'privacy_policy'.tr : 'terms_conditions'.tr,
               style: robotoMedium.copyWith(color: Theme.of(context).primaryColor),
             ),
           ]),
