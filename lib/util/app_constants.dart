@@ -2,7 +2,7 @@ import 'package:sixam_mart_delivery/features/language/domain/models/language_mod
 import 'package:sixam_mart_delivery/util/images.dart';
 
 class AppConstants {
-  static const String appName = 'MIXMRT Deliveryman';
+  static const String appName = 'MIXMRT Delivery';
   static const double appVersion = 2.8; // web version: 2.8
 
   static String baseUrl = 'https://mixmrt.com/zm';
