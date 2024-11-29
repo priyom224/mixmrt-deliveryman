@@ -91,7 +91,7 @@ class DisbursementController extends GetxController implements GetxService {
     if(isSuccess) {
       Get.back();
       getDisbursementMethodList();
-      showCustomSnackBar('the_request_is_send_to_the_admin_please_wait_until_admin_approval'.tr, isError: false);
+      showCustomSnackBar('add_successfully'.tr, isError: false);
     }
     _isLoading = false;
     update();

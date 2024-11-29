@@ -12,7 +12,6 @@ import 'package:sixam_mart_delivery/features/splash/controllers/splash_controlle
 import 'package:sixam_mart_delivery/features/auth/domain/models/delivery_man_body_model.dart';
 import 'package:sixam_mart_delivery/helper/custom_validator_helper.dart';
 import 'package:sixam_mart_delivery/helper/route_helper.dart';
-import 'package:sixam_mart_delivery/util/app_constants.dart';
 import 'package:sixam_mart_delivery/util/dimensions.dart';
 import 'package:sixam_mart_delivery/util/styles.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_app_bar_widget.dart';
@@ -22,7 +21,6 @@ import 'package:sixam_mart_delivery/common/widgets/custom_snackbar_widget.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_text_field_widget.dart';
 import 'package:sixam_mart_delivery/features/auth/widgets/condition_check_box_widget.dart';
 import 'package:sixam_mart_delivery/features/auth/widgets/pass_view_widget.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class DeliveryManRegistrationScreen extends StatefulWidget {
   const DeliveryManRegistrationScreen({super.key});
@@ -68,7 +66,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) async{
+      onPopInvokedWithResult: (didPop, result) async{
         if(Get.find<AuthController>().dmStatus != 0.4 && !didPop) {
           Get.find<AuthController>().dmStatusChange(0.4);
         }else{
@@ -424,30 +422,9 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                         ),
                         const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
-                        /*Row(children: [
-                          Expanded(child: CustomTextFieldWidget(
-                            hintText: authController.identityTypeIndex == 0 ? 'Ex: XXXXX-XXXXXXX-X' : authController.identityTypeIndex == 1 ? 'L-XXX-XXX-XXX-XXX.' : 'XXX-XXXXX',
-                            controller: _identityNumberController,
-                            focusNode: _identityNumberNode,
-                            inputAction: TextInputAction.done,
-                          ),
-                          ),
-                          Get.find<SplashController>().configModel?.deliveryAgreement == true ? const SizedBox(width: Dimensions.paddingSizeExtraLarge) : const SizedBox(),
-                          Get.find<SplashController>().configModel?.deliveryAgreement == true ? Expanded(
-                            child: CustomButtonWidget(
-                              buttonText: 'download_agreement'.tr,
-                              onPressed: () async {
-                                String? downloadFormUri = AppConstants.downloadFormUri.toString();
-                                launchUrlString(downloadFormUri, mode: LaunchMode.externalApplication);
-                              },
-                            ),
-                          ) : const SizedBox(),
-                        ],
-                        ),
-                        const SizedBox(height: Dimensions.paddingSizeExtraLarge),*/
-
                         CustomTextFieldWidget(
-                          hintText: authController.identityTypeIndex == 0 ? 'Ex: XXXXX-XXXXXXX-X' : authController.identityTypeIndex == 1 ? 'L-XXX-XXX-XXX-XXX.' : 'XXX-XXXXX',
+                          hintText: authController.identityTypeIndex == 0 ? 'Ex: XXXXX-XXXXXXX-X'
+                              : authController.identityTypeIndex == 1 ? 'L-XXX-XXX-XXX-XXX.' : 'XXX-XXXXX',
                           controller: _identityNumberController,
                           focusNode: _identityNumberNode,
                           inputAction: TextInputAction.done,
@@ -522,57 +499,10 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                             );
                           },
                         ),
-                        const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+                        const SizedBox(height: Dimensions.paddingSizeSmall),
 
-                        /*Row(children: [
-                          Expanded(flex: 10, child: Stack(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                child: authController.pickedAgreement != null ? getFileWidget(authController.pickedAgreement!.path) : SizedBox(
-                                  width: context.width, height: 120,
-                                  child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        ConditionCheckBoxWidget(authController: authController, fromSignUp: true),
 
-                                    Icon(Icons.file_copy, size: 38, color: Theme.of(context).disabledColor),
-                                    const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                                    Text(
-                                      'upload_agreement_document'.tr,
-                                      style: robotoMedium.copyWith(color: Theme.of(context).disabledColor), textAlign: TextAlign.center,
-                                    ),
-                                  ]),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0, right: 0, top: 0, left: 0,
-                              child: InkWell(
-                                onTap: () => authController.pickAgreement(),
-                                child: DottedBorder(
-                                  color: Theme.of(context).primaryColor,
-                                  strokeWidth: 1,
-                                  strokeCap: StrokeCap.butt,
-                                  dashPattern: const [5, 5],
-                                  padding: const EdgeInsets.all(0),
-                                  borderType: BorderType.RRect,
-                                  radius: const Radius.circular(Dimensions.radiusDefault),
-                                  child: const SizedBox(),
-                                ),
-                              ),
-                            ),
-                          ]),),
-                        ],),
-                        const SizedBox(height: Dimensions.paddingSizeSmall),*/
-
-
-                        ConditionCheckBoxWidget(authController: authController, isAgreement: true),
-                        const SizedBox(height: Dimensions.paddingSizeDefault),
-
-                        ConditionCheckBoxWidget(authController: authController),
-                        const SizedBox(height: Dimensions.paddingSizeDefault),
-
-                        ConditionCheckBoxWidget(authController: authController, isPrivacyPolicy: true),
                       ]),
                     ),
 
@@ -583,7 +513,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                   buttonText: authController.dmStatus == 0.4 ? 'next'.tr : 'submit'.tr,
                   margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
                   height: 50,
-                  onPressed: (!authController.acceptTerms || !authController.isAgreement || !authController.isPrivacyPolicy) ? null : () async {
+                  onPressed:  !authController.acceptTerms ? null : () async {
                     if(authController.dmStatus == 0.4){
                       String fName = _fNameController.text.trim();
                       String lName = _lNameController.text.trim();
@@ -648,18 +578,15 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
     PhoneValid phoneValid = await CustomValidatorHelper.isPhoneValid(numberWithCountryCode);
     numberWithCountryCode = phoneValid.phone;
 
-    if(authController.vehicleIndex!-1 == -1) {
-      showCustomSnackBar('please_select_vehicle_for_the_deliveryman'.tr);
-    }
-    else if(identityNumber.isEmpty) {
+    if(identityNumber.isEmpty) {
       showCustomSnackBar('enter_delivery_man_identity_number'.tr);
     }else if(authController.pickedImage == null) {
       showCustomSnackBar('upload_delivery_man_image'.tr);
     }else if (!phoneValid.isValid) {
       showCustomSnackBar('invalid_phone_number'.tr);
-    }/*else if(authController.pickedAgreement == null){
-      showCustomSnackBar('upload_agreement_document'.tr);
-    }*/else if(authController.pickedIdentities.isEmpty) {
+    }else if(authController.vehicleIndex!-1 == -1) {
+      showCustomSnackBar('please_select_vehicle_for_the_deliveryman'.tr);
+    }else if(authController.pickedIdentities.isEmpty) {
       showCustomSnackBar('please_upload_identity_image'.tr);
     }else {
       authController.registerDeliveryMan(DeliveryManBodyModel(
@@ -668,74 +595,6 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
         earning: authController.dmTypeIndex == 0 ? '1' : '0', zoneId: addressController.zoneList![addressController.selectedZoneIndex!].id.toString(),
         vehicleId: authController.vehicles![authController.vehicleIndex! - 1].id.toString(),
       ));
-    }
-  }
-
-  /// Returns a widget corresponding to the file type based on the file extension.
-  Widget getFileWidget(String filePath) {
-    String fileName = filePath.split('/').last; // Extracting file name
-    String extension = fileName.split('.').last.toLowerCase(); // Extracting file extension
-    switch (extension) {
-      case 'png':
-      case 'jpg':
-      case 'jpeg':
-      case 'gif':
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.file(File(filePath), width: context.width, height: 120, fit: BoxFit.cover),
-            Text(fileName), // Displaying file name
-          ],
-        );
-      case 'pdf':
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Center(child: Icon(Icons.picture_as_pdf, size: 120, color: Colors.red)), // PDF icon
-            Text(fileName), // Displaying file name
-          ],
-        );
-      case 'doc':
-      case 'docx':
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Center(child: Icon(Icons.description, size: 120, color: Colors.blue)), // Word document icon
-            Text(fileName), // Displaying file name
-          ],
-        );
-      case 'txt':
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Center(child: Icon(Icons.text_snippet, size: 120, color: Colors.orange)), // Text file icon
-            Text(fileName), // Displaying file name
-          ],
-        );
-      case 'pptx':
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Center(child: Icon(Icons.slideshow, size: 120, color: Colors.deepPurple)), // PowerPoint icon
-            Text(fileName), // Displaying file name
-          ],
-        );
-      case 'xlsx':
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Center(child: Icon(Icons.table_chart, size: 120, color: Colors.green)), // Excel icon
-            Text(fileName), // Displaying file name
-          ],
-        );
-      default:
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Center(child: Icon(Icons.file_copy, size: 120, color: Colors.grey)), // Default file icon
-            Text(fileName), // Displaying file name
-          ],
-        );
     }
   }
 }

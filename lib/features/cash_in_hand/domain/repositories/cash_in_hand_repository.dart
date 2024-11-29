@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sixam_mart_delivery/api/api_client.dart';
 import 'package:sixam_mart_delivery/common/models/response_model.dart';
-import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart_delivery/features/cash_in_hand/domain/models/wallet_payment_model.dart';
 import 'package:sixam_mart_delivery/features/cash_in_hand/domain/repositories/cash_in_hand_repository_interface.dart';
-import 'package:sixam_mart_delivery/features/order/domain/models/offline_method_model.dart';
 import 'package:sixam_mart_delivery/helper/route_helper.dart';
 import 'package:sixam_mart_delivery/util/app_constants.dart';
 
@@ -99,36 +95,6 @@ class CashInHandRepository implements CashInHandRepositoryInterface {
   @override
   Future update(Map<String, dynamic> body) {
     throw UnimplementedError();
-  }
-
-  @override
-  Future<List<OfflineMethodModel>?> getOfflineMethodList() async{
-    Response response = await apiClient.getData('${AppConstants.offlineMethodListUri}?token=${Get.find<AuthController>().getUserToken()}');
-    List<OfflineMethodModel>? offlineMethodList;
-    if(response.statusCode == 200) {
-      offlineMethodList = [];
-      response.body.forEach((method) {
-        OfflineMethodModel offlineMethod = OfflineMethodModel.fromJson(method);
-        offlineMethodList!.add(offlineMethod);
-      });
-    }
-    return offlineMethodList;
-  }
-
-  @override
-  Future<ResponseModel> saveOfflineInfo(String data) async{
-    Response response = await apiClient.postData(AppConstants.makeCollectedCashPaymentUriOffline, jsonDecode(data),);
-    if(response.statusCode == 200){
-      return ResponseModel(true, response.body.toString());
-    }else{
-      return ResponseModel(false, response.statusText);
-    }
-
-  }
-
-  @override
-  Future<Response> getOfflineList() async{
-    return await apiClient.getData('${AppConstants.offlineMethodDeliveryListUri}?token=${Get.find<AuthController>().getUserToken()}');
   }
 
 }

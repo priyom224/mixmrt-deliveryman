@@ -4,6 +4,7 @@ class Images {
   static const String lock = 'assets/image/lock.png';
   static const String english = 'assets/image/english.png';
   static const String arabic = 'assets/image/arabic.png';
+  static const String spanish = 'assets/image/spanish.png';
   static const String bangla = 'assets/image/bangla.png';
   static const String mail = 'assets/image/mail.png';
   static const String checked = 'assets/image/checked.png';
@@ -40,5 +41,9 @@ class Images {
   static const String dmAvatar = 'assets/image/dm_avatar.png';
   static const String userMarker = 'assets/image/user_marker.png';
   static const String markerStore = 'assets/image/marker_store.png';
-  static const String offlinePayment = 'assets/image/offline_payment.png';
+  static const String languageBackground = 'assets/image/language_bg.png';
+  static const String cautionDialogIcon = 'assets/image/caution_dialog_icon.png';
+
+  ///Svg Images
+  static const String changePasswordBgImage = 'assets/image/change_password_bg_image.svg';
 }

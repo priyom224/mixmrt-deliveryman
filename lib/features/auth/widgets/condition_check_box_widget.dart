@@ -7,33 +7,33 @@ import 'package:sixam_mart_delivery/util/styles.dart';
 
 class ConditionCheckBoxWidget extends StatelessWidget {
   final AuthController authController;
-  final bool isPrivacyPolicy;
-  final bool isAgreement;
-  const ConditionCheckBoxWidget({super.key, required this.authController, this.isPrivacyPolicy = false, this.isAgreement = false});
+  final bool fromSignUp;
+  const ConditionCheckBoxWidget({super.key, required this.authController, this.fromSignUp = false});
 
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+    return Row(mainAxisAlignment: fromSignUp ? MainAxisAlignment.start : MainAxisAlignment.center, children: [
 
-      Checkbox(
+      fromSignUp ? Checkbox(
         activeColor: Theme.of(context).primaryColor,
         visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-        value: isAgreement ? authController.isAgreement : isPrivacyPolicy ? authController.isPrivacyPolicy : authController.acceptTerms,
-        onChanged: (bool? isChecked) => isAgreement ? authController.toggleAgreement() : isPrivacyPolicy ? authController.togglePrivacyPolicy() : authController.toggleTerms(),
-      ),
+        value: authController.acceptTerms,
+        onChanged: (bool? isChecked) => authController.toggleTerms(),
+      ) : const SizedBox(),
 
-      const Text( '*', style: robotoRegular),
+      fromSignUp ? const SizedBox() : const Text( '*', style: robotoRegular),
 
       Flexible(
         child: RichText(
           text: TextSpan(children: [
-            TextSpan(text: 'i_agree_with_all_the'.tr, style: robotoRegular.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color)),
+            TextSpan(
+              text: 'by_login_i_agree_with_all_the'.tr,
+              style: robotoRegular.copyWith(color: fromSignUp ? Theme.of(context).textTheme.bodyMedium!.color : Theme.of(context).hintColor),
+            ),
             const TextSpan(text: ' '),
             TextSpan(
-              recognizer: TapGestureRecognizer()..onTap = () => isAgreement ? Get.toNamed(RouteHelper.getAgreementRoute()) :
-              isPrivacyPolicy ? Get.toNamed(RouteHelper.getPrivacyRoute()) :
-              Get.toNamed(RouteHelper.getTermsRoute()),
-              text:  isAgreement ? 'agreement_contract'.tr : isPrivacyPolicy ? 'privacy_policy'.tr : 'terms_conditions'.tr,
+              recognizer: TapGestureRecognizer()..onTap = () => Get.toNamed(RouteHelper.getTermsRoute()),
+              text: 'terms_conditions'.tr,
               style: robotoMedium.copyWith(color: Theme.of(context).primaryColor),
             ),
           ]),

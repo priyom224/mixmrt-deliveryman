@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sixam_mart_delivery/features/profile/domain/models/profile_model.dart';
 import 'package:sixam_mart_delivery/common/models/response_model.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_snackbar_widget.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart_delivery/features/forgot_password/domain/services/forgot_password_service_interface.dart';
+import 'package:sixam_mart_delivery/helper/route_helper.dart';
 
 class ForgotPasswordController extends GetxController implements GetxService {
   final ForgotPasswordServiceInterface forgotPasswordServiceInterface;
@@ -48,6 +50,15 @@ class ForgotPasswordController extends GetxController implements GetxService {
     return responseModel;
   }
 
+  Future<ResponseModel> verifyFirebaseOtp({required String phoneNumber, required String session, required String otp}) async {
+    _isLoading = true;
+    update();
+    ResponseModel responseModel = await forgotPasswordServiceInterface.verifyFirebaseOtp(phoneNumber: phoneNumber, session: session, otp: otp);
+    _isLoading = false;
+    update();
+    return responseModel;
+  }
+
   Future<ResponseModel> resetPassword(String? resetToken, String phone, String password, String confirmPassword) async {
     _isLoading = true;
     update();
@@ -60,6 +71,36 @@ class ForgotPasswordController extends GetxController implements GetxService {
   void updateVerificationCode(String query) {
     _verificationCode = query;
     update();
+  }
+
+  Future<void> firebaseVerifyPhoneNumber(String phoneNumber, {bool canRoute = true}) async {
+    _isLoading = true;
+    update();
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) {},
+      verificationFailed: (FirebaseAuthException e) {
+        _isLoading = false;
+        update();
+
+        if(e.code == 'invalid-phone-number') {
+          showCustomSnackBar('please_submit_a_valid_phone_number'.tr);
+        }else{
+          showCustomSnackBar(e.message?.replaceAll('_', ' '));
+        }
+
+      },
+      codeSent: (String vId, int? resendToken) {
+        _isLoading = false;
+        update();
+
+        if(canRoute) {
+          Get.toNamed(RouteHelper.getVerificationRoute(phoneNumber, session: vId));
+        }
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
   }
 
 }

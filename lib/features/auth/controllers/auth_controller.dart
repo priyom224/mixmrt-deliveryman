@@ -1,19 +1,13 @@
 import 'dart:async';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:sixam_mart_delivery/api/api_checker.dart';
 import 'package:sixam_mart_delivery/api/api_client.dart';
 import 'package:sixam_mart_delivery/features/auth/domain/models/delivery_man_body_model.dart';
 import 'package:sixam_mart_delivery/common/models/response_model.dart';
 import 'package:sixam_mart_delivery/features/auth/domain/models/vehicle_model.dart';
-import 'package:sixam_mart_delivery/features/order/domain/models/offline_list_model.dart';
-import 'package:sixam_mart_delivery/features/order/domain/models/offline_method_model.dart';
 import 'package:sixam_mart_delivery/helper/route_helper.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_snackbar_widget.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sixam_mart_delivery/features/auth/domain/services/auth_service_interface.dart';
-import 'package:sixam_mart_delivery/util/app_constants.dart';
 
 class AuthController extends GetxController implements GetxService {
   final AuthServiceInterface authServiceInterface;
@@ -36,7 +30,7 @@ class AuthController extends GetxController implements GetxService {
   List<XFile> _pickedIdentities = [];
   List<XFile> get pickedIdentities => _pickedIdentities;
   
-  final List<String> _identityTypeList = AppConstants.baseUrl.contains('zm') ? ['nrc', 'driving_license', 'passport'] : ['nid', 'driving_license', 'passport'];
+  final List<String> _identityTypeList = ['passport', 'driving_license', 'nid'];
   List<String> get identityTypeList => _identityTypeList;
   
   int _identityTypeIndex = 0;
@@ -81,18 +75,8 @@ class AuthController extends GetxController implements GetxService {
   bool _acceptTerms = true;
   bool get acceptTerms => _acceptTerms;
 
-  bool _isAgreement = true;
-  bool get isAgreement => _isAgreement;
-
-  bool _isPrivacyPolicy = true;
-  bool get isPrivacyPolicy => _isPrivacyPolicy;
-
-  XFile? _pickedAgreement;
-  XFile? get pickedAgreement => _pickedAgreement;
-
-  void initData() {
-    _pickedAgreement = null;
-  }
+  bool _notificationLoading = false;
+  bool get notificationLoading => _notificationLoading;
 
   Future<ResponseModel> login(String phone, String password) async {
     _isLoading = true;
@@ -100,7 +84,7 @@ class AuthController extends GetxController implements GetxService {
     Response response = await authServiceInterface.login(phone, password);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
-      authServiceInterface.saveUserToken(response.body['token'], response.body['topic'], response.body['parcel_topic']);
+      authServiceInterface.saveUserToken(response.body['token'], response.body['zone_topic'], response.body['topic']);
       await authServiceInterface.updateToken();
       responseModel = ResponseModel(true, 'successful');
     } else {
@@ -158,16 +142,6 @@ class AuthController extends GetxController implements GetxService {
     update();
   }
 
-  void toggleAgreement() {
-    _isAgreement = !_isAgreement;
-    update();
-  }
-
-  void togglePrivacyPolicy() {
-    _isPrivacyPolicy = !_isPrivacyPolicy;
-    update();
-  }
-
   void toggleRememberMe() {
     _isActiveRememberMe = !_isActiveRememberMe;
     update();
@@ -205,9 +179,12 @@ class AuthController extends GetxController implements GetxService {
     return authServiceInterface.getUserToken();
   }
 
-  bool setNotificationActive(bool isActive) {
+  Future<bool> setNotificationActive(bool isActive) async {
+    _notificationLoading = true;
+    update();
     _notification = isActive;
     authServiceInterface.setNotificationActive(isActive);
+    _notificationLoading = false;
     update();
     return _notification;
   }
@@ -292,14 +269,6 @@ class AuthController extends GetxController implements GetxService {
     if(isUpdate) {
       update();
     }
-  }
-
-  void pickAgreement() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles( type: FileType.custom, allowedExtensions: ['png','jpg','jpeg','pdf','doc','docx','gif','txt','pptx','xlsx']);
-    if (result != null) {
-      _pickedAgreement = XFile(result.files.single.path!);
-    }
-    update();
   }
   
 }

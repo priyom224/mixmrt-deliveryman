@@ -37,7 +37,8 @@ class ProfileController extends GetxController implements GetxService {
       _profileModel = profileModel;
       if (_profileModel!.active == 1) {
         LocationPermission permission = await Geolocator.checkPermission();
-        if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+        if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever
+            || (GetPlatform.isIOS ? false : permission == LocationPermission.whileInUse)) {
           Get.dialog(ConfirmationDialogWidget(
             icon: Images.locationPermission, iconSize: 200, hasCancel: false,
             description: 'this_app_collects_location_data'.tr,
@@ -88,7 +89,8 @@ class ProfileController extends GetxController implements GetxService {
       showCustomSnackBar(responseModel.message, isError: false);
       if (_profileModel!.active == 1) {
         LocationPermission permission = await Geolocator.checkPermission();
-        if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+        if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever
+            || (GetPlatform.isIOS ? false : permission == LocationPermission.whileInUse)) {
           Get.dialog(ConfirmationDialogWidget(
             icon: Images.locationPermission, iconSize: 200, hasCancel: false,
             description: 'this_app_collects_location_data'.tr,

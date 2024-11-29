@@ -2,14 +2,10 @@ import 'package:sixam_mart_delivery/features/language/domain/models/language_mod
 import 'package:sixam_mart_delivery/util/images.dart';
 
 class AppConstants {
-  static const String appName = 'MIXMRT Delivery';
-  static const double appVersion = 2.8; // web version: 2.8
+  static const String appName = '6amMart Delivery';
+  static const double appVersion = 2.12; ///Flutter sdk 3.24.5
 
-  static String baseUrl = 'https://mixmrt.com/zm';
-
-  static void setBaseUrl(String url) {
-    baseUrl = url;
-  }
+  static const String baseUrl = 'https://6ammart-admin.6amtech.com';
 
   static const String configUri = '/api/v1/config';
   static const String forgetPasswordUri = '/api/v1/auth/delivery-man/forgot-password';
@@ -29,9 +25,9 @@ class AppConstants {
   static const String activeStatusUri = '/api/v1/delivery-man/update-active-status';
   static const String updateProfileUri = '/api/v1/delivery-man/update-profile';
   static const String notificationUri = '/api/v1/delivery-man/notifications?token=';
-  static const String aboutUsUri = '/about-us';
-  static const String privacyPolicyUri = '/privacy-policy';
-  static const String tramsAndConditionUri = '/terms-and-conditions';
+  static const String aboutUsUri = '/api/v1/about-us';
+  static const String privacyPolicyUri = '/api/v1/privacy-policy';
+  static const String tramsAndConditionUri = '/api/v1/terms-and-conditions';
   static const String driverRemoveUri = '/api/v1/delivery-man/remove-account?token=';
   static const String dmRegisterUri = '/api/v1/auth/delivery-man/store';
   static const String zoneListUri = '/api/v1/zone/list';
@@ -50,25 +46,22 @@ class AppConstants {
   static const String walletPaymentListUri = '/api/v1/delivery-man/wallet-payment-list';
   static const String makeWalletAdjustmentUri = '/api/v1/delivery-man/make-wallet-adjustment';
   static const String walletProvidedEarningListUri = '/api/v1/delivery-man/wallet-provided-earning-list';
-  //static String downloadFormUri = '$baseUrl/deliveryman/download-delivery-man-agreement';
-  static const String makeCollectedCashPaymentUriOffline = '/api/v1/delivery-man/make-collected-cash-payment-offline';
-  static const String offlineMethodListUri = '/api/v1/offline_payment_method_list';
-  static const String offlineMethodDeliveryListUri = '/api/v1/delivery-man/offline-payment-list';
-  static const String getAgreementUri = '/api/v1/show-agreement/dm';
+  static const String firebaseAuthVerify = '/api/v1/auth/delivery-man/firebase-verify-token';
 
 
-
-  //chat url
+  ///chat url
   static const String getConversationListUri = '/api/v1/delivery-man/message/list';
   static const String getMessageListUri = '/api/v1/delivery-man/message/details';
   static const String sendMessageUri = '/api/v1/delivery-man/message/send';
   static const String searchConversationListUri = '/api/v1/delivery-man/message/search-list';
 
-  // Shared Key
+  /// Shared Key
   static const String theme = 'sixam_mart_delivery_theme';
   static const String token = 'sixam_mart_delivery_token';
   static const String countryCode = 'sixam_mart_delivery_country_code';
   static const String languageCode = 'sixam_mart_delivery_language_code';
+  static const String cacheCountryCode = 'cache_country_code';
+  static const String cacheLanguageCode = 'cache_language_code';
   static const String userPassword = 'sixam_mart_delivery_user_password';
   static const String userAddress = 'sixam_mart_delivery_user_address';
   static const String userNumber = 'sixam_mart_delivery_user_number';
@@ -77,12 +70,12 @@ class AppConstants {
   static const String notificationCount = 'sixam_mart_delivery_notification_count';
   static const String ignoreList = 'sixam_mart_delivery_ignore_list';
   static const String topic = 'all_zone_delivery_man';
-  static const String parcelTopic = 'parcel_topic';
   static const String zoneTopic = 'zone_topic';
+  static const String vehicleWiseTopic = 'vehicle_wise_topic';
   static const String localizationKey = 'X-localization';
   static const String langIntro = 'language_intro';
 
-  // Status
+  /// Status
   static const String pending = 'pending';
   static const String confirmed = 'confirmed';
   static const String accepted = 'accepted';
@@ -102,6 +95,8 @@ class AppConstants {
 
   static List<LanguageModel> languages = [
     LanguageModel(imageUrl: Images.english, languageName: 'English', countryCode: 'US', languageCode: 'en'),
+    LanguageModel(imageUrl: Images.arabic, languageName: 'Arabic', countryCode: 'SA', languageCode: 'ar'),
+    LanguageModel(imageUrl: Images.spanish, languageName: 'Spanish', countryCode: 'ES', languageCode: 'es'),
+    LanguageModel(imageUrl: Images.bangla, languageName: 'Bengali', countryCode: 'BN', languageCode: 'bn'),
   ];
-
 }

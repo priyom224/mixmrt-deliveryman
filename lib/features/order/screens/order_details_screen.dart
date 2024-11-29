@@ -99,7 +99,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
 
     return PopScope(
       canPop: true,
-      onPopInvoked: (didPop) async{
+      onPopInvokedWithResult: (didPop, result) async{
         if((widget.fromNotification || widget.fromLocationScreen)) {
           Future.delayed(const Duration(milliseconds: 0), () async {
             await Get.offAllNamed(RouteHelper.getInitialRoute());
@@ -299,7 +299,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                       longitude: parcel ? controllerOrderModel.deliveryAddress!.longitude : controllerOrderModel.storeLng,
                       showButton: (controllerOrderModel.orderStatus != 'delivered' && controllerOrderModel.orderStatus != 'failed'
                           && controllerOrderModel.orderStatus != 'canceled' && controllerOrderModel.orderStatus != 'refunded'),
-                      isStore: true, isChatAllow: showChatPermission,
+                      isStore: parcel ? false : true, isChatAllow: showChatPermission,
                       messageOnTap: () => Get.toNamed(RouteHelper.getChatRoute(
                         notificationBody: NotificationBodyModel(
                           orderId: controllerOrderModel.id, vendorId: orderController.orderDetailsModel![0].vendorId,
@@ -337,19 +337,19 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                     ),
                     const SizedBox(height: Dimensions.paddingSizeLarge),
 
-                    /* parcel ? Container(
+                    parcel ? Container(
                       padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                        boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 200]!, spreadRadius: 1, blurRadius: 5)],
+                        boxShadow: Get.isDarkMode ? null : [BoxShadow(color: Colors.grey[200]!, spreadRadius: 1, blurRadius: 5)],
                       ),
                       child: controllerOrderModel.parcelCategory != null ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         Text('parcel_category'.tr, style: robotoRegular),
                         const SizedBox(height: Dimensions.paddingSizeExtraSmall),
                         Row(children: [
-                          ClipOval(child: CustomImage(
-                            image: '${Get.find<SplashController>().configModel!.baseUrls!.parcelCategoryImageUrl}/${controllerOrderModel.parcelCategory!.image}',
+                          ClipOval(child: CustomImageWidget(
+                            image: '${controllerOrderModel.parcelCategory!.imageFullUrl}',
                             height: 35, width: 35, fit: BoxFit.cover,
                           )),
                           const SizedBox(width: Dimensions.paddingSizeSmall),
@@ -380,7 +380,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                       itemBuilder: (context, index) {
                         return OrderItemWidget(order: controllerOrderModel, orderDetails: orderController.orderDetailsModel![index]);
                       },
-                    ),*/
+                    ),
 
                     (controllerOrderModel.orderNote  != null && controllerOrderModel.orderNote!.isNotEmpty) ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Text('additional_note'.tr, style: robotoRegular),
@@ -450,85 +450,97 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
 
                       const SizedBox(height: Dimensions.paddingSizeLarge),
                     ]) : const SizedBox(),
-                   // const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+                    const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
-                    // !parcel ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    //   Text('item_price'.tr, style: robotoRegular),
-                    //   Row(mainAxisSize: MainAxisSize.min, children: [
-                    //     // order.prescriptionOrder ? IconButton(
-                    //     //   constraints: const BoxConstraints(maxHeight: 36),
-                    //     //   onPressed: () =>  Get.dialog(AmountInputDialogue(orderId: widget.orderId, isItemPrice: true, amount: itemsPrice), barrierDismissible: true),
-                    //     //   icon: const Icon(Icons.edit, size: 16),
-                    //     // ) : const SizedBox(),
-                    //     Text(PriceConverter.convertPrice(itemsPrice), style: robotoRegular),
-                    //   ]),
-                    // ]) : const SizedBox(),
-                    // SizedBox(height: !parcel ? 10 : 0),
-                    //
-                    // Get.find<SplashController>().getModuleConfig(order.moduleType).addOn! ? Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     Text('addons'.tr, style: robotoRegular),
-                    //     Text('(+) ${PriceConverter.convertPrice(addOns)}', style: robotoRegular),
-                    //   ],
-                    // ) : const SizedBox(),
-                    //
-                    // Get.find<SplashController>().getModuleConfig(order.moduleType).addOn! ? Divider(
-                    //   thickness: 1, color: Theme.of(context).hintColor.withOpacity(0.5),
-                    // ) : const SizedBox(),
-                    //
-                    // Get.find<SplashController>().getModuleConfig(order.moduleType).addOn! ? Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     Text('${'subtotal'.tr} ${taxIncluded ? '(${'tax_included'.tr})' : ''}', style: robotoMedium),
-                    //     Text(PriceConverter.convertPrice(subTotal), style: robotoMedium),
-                    //   ],
-                    // ) : const SizedBox(),
-                    // SizedBox(height: Get.find<SplashController>().getModuleConfig(order.moduleType).addOn! ? 10 : 0),
-                    //
-                    // !parcel ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    //   Text('discount'.tr, style: robotoRegular),
-                    //   Row(mainAxisSize: MainAxisSize.min, children: [
-                    //     // order.prescriptionOrder! ? IconButton(
-                    //     //   constraints: const BoxConstraints(maxHeight: 36),
-                    //     //   onPressed: () => Get.dialog(AmountInputDialogue(orderId: widget.orderId, isItemPrice: false, amount: discount), barrierDismissible: true),
-                    //     //   icon: const Icon(Icons.edit, size: 16),
-                    //     // ) : const SizedBox(),
-                    //     Text('(-) ${PriceConverter.convertPrice(discount)}', style: robotoRegular),
-                    //   ]),
-                    // ]) : const SizedBox(),
-                    // SizedBox(height: !parcel ? 10 : 0),
-                    //
-                    // couponDiscount > 0 ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    //   Text('coupon_discount'.tr, style: robotoRegular),
-                    //   Text(
-                    //     '(-) ${PriceConverter.convertPrice(couponDiscount)}',
-                    //     style: robotoRegular,
-                    //   ),
-                    // ]) : const SizedBox(),
-                    // SizedBox(height: couponDiscount > 0 ? 10 : 0),
-                    //
-                    // !taxIncluded && !parcel ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    //   Text('vat_tax'.tr, style: robotoRegular),
-                    //   Text('(+) ${PriceConverter.convertPrice(tax)}', style: robotoRegular),
-                    // ]) : const SizedBox(),
-                    // SizedBox(height: taxIncluded ? 0 : 10),
-                    //
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     Text('delivery_man_tips'.tr, style: robotoRegular),
-                    //     Text('(+) ${PriceConverter.convertPrice(dmTips)}', style: robotoRegular),
-                    //   ],
-                    // ),
-                    // const SizedBox(height: 10),
-                    //
-                    // (order.additionalCharge != null && order.additionalCharge! > 0) ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    //   Text(Get.find<SplashController>().configModel!.additionalChargeName!, style: robotoRegular),
-                    //   Text('(+) ${PriceConverter.convertPrice(order.additionalCharge)}', style: robotoRegular, textDirection: TextDirection.ltr),
-                    // ]) : const SizedBox(),
-                    // (order.additionalCharge != null && order.additionalCharge! > 0) ? const SizedBox(height: 10) : const SizedBox(),
+                    !parcel ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('item_price'.tr, style: robotoRegular),
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        Text(PriceConverterHelper.convertPrice(itemsPrice), style: robotoRegular),
+                      ]),
+                    ]) : const SizedBox(),
+                    SizedBox(height: !parcel ? 10 : 0),
 
+                    Get.find<SplashController>().getModuleConfig(order.moduleType).addOn! ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('addons'.tr, style: robotoRegular),
+                        Text('(+) ${PriceConverterHelper.convertPrice(addOns)}', style: robotoRegular),
+                      ],
+                    ) : const SizedBox(),
+
+                    Get.find<SplashController>().getModuleConfig(order.moduleType).addOn! ? Divider(
+                      thickness: 1, color: Theme.of(context).hintColor.withOpacity(0.5),
+                    ) : const SizedBox(),
+
+                    Get.find<SplashController>().getModuleConfig(order.moduleType).addOn! ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('${'subtotal'.tr} ${taxIncluded ? '(${'tax_included'.tr})' : ''}', style: robotoMedium),
+                        Text(PriceConverterHelper.convertPrice(subTotal), style: robotoMedium),
+                      ],
+                    ) : const SizedBox(),
+                    SizedBox(height: Get.find<SplashController>().getModuleConfig(order.moduleType).addOn! ? 10 : 0),
+
+                    !parcel ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('discount'.tr, style: robotoRegular),
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        Text('(-) ${PriceConverterHelper.convertPrice(discount)}', style: robotoRegular),
+                      ]),
+                    ]) : const SizedBox(),
+                    SizedBox(height: !parcel ? 10 : 0),
+
+                    couponDiscount > 0 ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('coupon_discount'.tr, style: robotoRegular),
+                      Text(
+                        '(-) ${PriceConverterHelper.convertPrice(couponDiscount)}',
+                        style: robotoRegular,
+                      ),
+                    ]) : const SizedBox(),
+                    SizedBox(height: couponDiscount > 0 ? 10 : 0),
+
+                    (referrerBonusAmount > 0) ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('referral_discount'.tr, style: robotoRegular),
+                        Text('(-) ${PriceConverterHelper.convertPrice(referrerBonusAmount)}', style: robotoRegular),
+                      ],
+                    ) : const SizedBox(),
+                    SizedBox(height: referrerBonusAmount > 0 ? 10 : 0),
+
+                    !taxIncluded && !parcel ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('vat_tax'.tr, style: robotoRegular),
+                      Text('(+) ${PriceConverterHelper.convertPrice(tax)}', style: robotoRegular),
+                    ]) : const SizedBox(),
+                    SizedBox(height: taxIncluded ? 0 : 10),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('delivery_man_tips'.tr, style: robotoRegular),
+                        Text('(+) ${PriceConverterHelper.convertPrice(dmTips)}', style: robotoRegular),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    (extraPackagingAmount > 0) ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('extra_packaging'.tr, style: robotoRegular),
+                        Text('(+) ${PriceConverterHelper.convertPrice(extraPackagingAmount)}', style: robotoRegular),
+                      ],
+                    ) : const SizedBox(),
+                    SizedBox(height: extraPackagingAmount > 0 ? 10 : 0),
+
+                    (order.additionalCharge != null && order.additionalCharge! > 0) ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text(Get.find<SplashController>().configModel!.additionalChargeName!, style: robotoRegular),
+                      Text('(+) ${PriceConverterHelper.convertPrice(order.additionalCharge)}', style: robotoRegular, textDirection: TextDirection.ltr),
+                    ]) : const SizedBox(),
+                    (order.additionalCharge != null && order.additionalCharge! > 0) ? const SizedBox(height: 10) : const SizedBox(),
+
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('delivery_fee'.tr, style: robotoRegular),
+                      Text('(+) ${PriceConverterHelper.convertPrice(deliveryCharge)}', style: robotoRegular),
+                    ]),
 
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
@@ -580,22 +592,15 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                     ) : const SizedBox(),
                     SizedBox(height: partialPay ? 20 : 0),
 
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      Text('delivery_fee'.tr, style: robotoMedium.copyWith(
+                    !partialPay ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('total_amount'.tr, style: robotoMedium.copyWith(
                         fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor,
                       )),
-                      Text('(+) ${PriceConverterHelper.convertPrice(deliveryCharge)}', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor),),
-                    ]),
-
-                    // !partialPay ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    //   Text('total_amount'.tr, style: robotoMedium.copyWith(
-                    //     fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor,
-                    //   )),
-                    //   Text(
-                    //     PriceConverter.convertPrice(total),
-                    //     style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor),
-                    //   ),
-                    // ]) : const SizedBox(),
+                      Text(
+                        PriceConverterHelper.convertPrice(total),
+                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor),
+                      ),
+                    ]) : const SizedBox(),
 
                   ]),
                 )),
@@ -726,8 +731,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                     buttonText: 'confirm'.tr, height: 40,
                     onPressed: () {
                       Get.dialog(ConfirmationDialogWidget(
-                        icon: Images.warning, title: '',
-                        description: parcel! ? 'are_you_sure_you_want_to_confirm_this_delivery'.tr : 'are_you_sure_you_want_to_confirm_this_order'.tr,
+                        icon: Images.warning, title: 'are_you_sure_to_confirm'.tr,
+                        description: parcel! ? 'you_want_to_confirm_this_delivery'.tr : 'you_want_to_confirm_this_order'.tr,
                         onYesPressed: () {
                           if((Get.find<SplashController>().configModel!.orderDeliveryVerification! || cod!) && !parcel!) {
                             orderController.updateOrderStatus(
@@ -755,8 +760,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                         orderController.initLoading();
                       }
                       Get.dialog(ConfirmationDialogWidget(
-                        icon: Images.warning, title: '',
-                        description: parcel! ? 'are_you_sure_you_want_to_confirm_this_delivery'.tr : 'are_you_sure_you_want_to_confirm_this_order'.tr,
+                        icon: Images.warning, title: 'are_you_sure_to_confirm'.tr,
+                        description: parcel! ? 'you_want_to_confirm_this_delivery'.tr : 'you_want_to_confirm_this_order'.tr,
                         onYesPressed: () {
                           orderController.updateOrderStatus(
                             controllerOrderModel, parcel! ? AppConstants.handover : AppConstants.confirmed, back: widget.fromLocationScreen? false: true,

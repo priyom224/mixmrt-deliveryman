@@ -91,7 +91,8 @@ class HomeScreen extends StatelessWidget {
                       ));
                     }else {
                       LocationPermission permission = await Geolocator.checkPermission();
-                      if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+                      if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever
+                          || (GetPlatform.isIOS ? false : permission == LocationPermission.whileInUse)) {
                         if(GetPlatform.isAndroid) {
                           Get.dialog(ConfirmationDialogWidget(
                             icon: Images.locationPermission,
@@ -232,7 +233,7 @@ class HomeScreen extends StatelessWidget {
 
               CountCardWidget(
                 title: 'total_orders'.tr, backgroundColor: Theme.of(context).primaryColor, height: 140,
-                value: profileController.profileModel!.orderCount.toString(),
+                value: profileController.profileModel?.orderCount.toString(),
               ),
               const SizedBox(height: Dimensions.paddingSizeSmall),
 
@@ -279,13 +280,13 @@ class HomeScreen extends StatelessWidget {
   void _checkPermission(Function callback) async {
     LocationPermission permission = await Geolocator.requestPermission();
     permission = await Geolocator.checkPermission();
-    if(permission == LocationPermission.denied) {
+    if(permission == LocationPermission.denied /*|| (GetPlatform.isIOS ? false : permission == LocationPermission.whileInUse)*/) {
       Get.dialog(CustomAlertDialogWidget(description: 'you_denied'.tr, onOkPressed: () async {
         Get.back();
         await Geolocator.requestPermission();
         _checkPermission(callback);
       }), barrierDismissible: false);
-    }else if(permission == LocationPermission.deniedForever) {
+    }else if(permission == LocationPermission.deniedForever || (GetPlatform.isIOS ? false : permission == LocationPermission.whileInUse)) {
       Get.dialog(CustomAlertDialogWidget(description: permission == LocationPermission.whileInUse ? 'you_denied'.tr : 'you_denied_forever'.tr, onOkPressed: () async {
         Get.back();
         await Geolocator.openAppSettings();

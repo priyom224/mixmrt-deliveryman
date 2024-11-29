@@ -14,7 +14,7 @@ import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 
 class ApiClient extends GetxService {
-  String appBaseUrl;
+  final String appBaseUrl;
   final SharedPreferences sharedPreferences;
   static const String noInternetMessage = 'Connection to API server failed due to internet connection';
   final int timeoutInSeconds = 30;
@@ -27,10 +27,6 @@ class ApiClient extends GetxService {
     debugPrint('Token: $token');
 
     updateHeader(token, sharedPreferences.getString(AppConstants.languageCode));
-  }
-
-  void updateBaseUrl(String url) {
-    appBaseUrl = url;
   }
 
   void updateHeader(String? token, String? languageCode) {

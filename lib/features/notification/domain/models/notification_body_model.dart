@@ -4,7 +4,12 @@ enum NotificationType{
   general,
   // ignore: constant_identifier_names
   order_request,
-  offlinePayment,
+  block,
+  unblock,
+  otp,
+  // ignore: constant_identifier_names
+  cash_collect,
+  unassign,
 }
 
 class NotificationBodyModel {
@@ -45,17 +50,19 @@ class NotificationBodyModel {
   }
 
   NotificationType convertToEnum(String? enumString) {
-    if(enumString == NotificationType.general.toString()) {
-      return NotificationType.general;
-    }else if(enumString == NotificationType.order.toString()) {
-      return NotificationType.order;
-    }else if(enumString == NotificationType.order_request.toString()) {
-      return NotificationType.order_request;
-    }else if(enumString == NotificationType.message.toString()) {
-      return NotificationType.message;
-    }else if(enumString == NotificationType.offlinePayment.toString()) {
-      return NotificationType.offlinePayment;
-    }
-    return NotificationType.general;
+    final Map<String, NotificationType> enumMap = {
+      NotificationType.general.toString(): NotificationType.general,
+      NotificationType.order.toString(): NotificationType.order,
+      NotificationType.order_request.toString(): NotificationType.order_request,
+      NotificationType.message.toString(): NotificationType.message,
+      NotificationType.block.toString(): NotificationType.block,
+      NotificationType.unblock.toString(): NotificationType.unblock,
+      NotificationType.otp.toString(): NotificationType.otp,
+      NotificationType.cash_collect.toString(): NotificationType.cash_collect,
+      NotificationType.unassign.toString(): NotificationType.unassign,
+    };
+
+    return enumMap[enumString] ?? NotificationType.general;
   }
+
 }

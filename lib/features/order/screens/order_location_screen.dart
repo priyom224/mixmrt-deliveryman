@@ -1,5 +1,7 @@
 import 'dart:collection';
+import 'dart:math';
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -25,7 +27,7 @@ class OrderLocationScreen extends StatefulWidget {
 
 class _OrderLocationScreenState extends State<OrderLocationScreen> {
   GoogleMapController? _controller;
-  Set<Marker> _markers = HashSet<Marker>();
+  final Set<Marker> _markers = HashSet<Marker>();
 
   @override
   Widget build(BuildContext context) {
@@ -66,103 +68,118 @@ class _OrderLocationScreenState extends State<OrderLocationScreen> {
 
   void setMarker(OrderModel orderModel, bool parcel) async {
     try {
+      Uint8List destinationImageData = await convertAssetToUnit8List(Images.customerMarker, width: 100);
       Uint8List restaurantImageData = await convertAssetToUnit8List(parcel ? Images.userMarker : Images.restaurantMarker, width: parcel ? 70 : 100);
       Uint8List deliveryBoyImageData = await convertAssetToUnit8List(Images.yourMarker, width: 100);
-      Uint8List destinationImageData = await convertAssetToUnit8List(Images.customerMarker, width: 100);
 
-      /// Animate to coordinate
       LatLngBounds? bounds;
-      if(_controller != null) {
-        if(parcel) {
-          if (((Get.find<ProfileController>().recordLocationBody?.latitude ?? 0) > double.parse(orderModel.deliveryAddress?.latitude ?? '0'))
-           && ((Get.find<ProfileController>().recordLocationBody?.longitude ?? 0) > double.parse(orderModel.deliveryAddress?.longitude ?? '0'))) {
-            bounds = LatLngBounds(
-              southwest: LatLng(
-              double.parse(orderModel.deliveryAddress?.latitude ?? '0'),
-              double.parse(orderModel.deliveryAddress?.longitude ?? '0'),
-              ),
-              northeast: LatLng(Get.find<ProfileController>().recordLocationBody?.latitude ?? 0, Get.find<ProfileController>().recordLocationBody?.latitude ?? 0),
-            );
-          } else if ((Get.find<ProfileController>().recordLocationBody?.longitude ?? 0) > double.parse(orderModel.deliveryAddress?.longitude ?? '0')) {
-            bounds = LatLngBounds(
-              southwest: LatLng(Get.find<ProfileController>().recordLocationBody?.latitude ?? 0, double.parse(orderModel.deliveryAddress?.longitude ?? '0')),
-              northeast: LatLng(
-                double.parse(orderModel.deliveryAddress?.latitude ?? '0'),
-                Get.find<ProfileController>().recordLocationBody?.latitude ?? 0,
-              ),
-            );
-          } else if ((Get.find<ProfileController>().recordLocationBody?.latitude ?? 0) > double.parse(orderModel.deliveryAddress?.latitude ?? '0')) {
-            bounds = LatLngBounds(
-                southwest: LatLng(double.parse(orderModel.deliveryAddress?.latitude ?? '0'), (Get.find<ProfileController>().recordLocationBody?.longitude ?? 0)),
-                northeast: LatLng((Get.find<ProfileController>().recordLocationBody?.latitude ?? 0), double.parse(orderModel.deliveryAddress?.longitude ?? '0')));
-          } else {
-            bounds = LatLngBounds(
-              southwest: LatLng(Get.find<ProfileController>().recordLocationBody?.latitude ?? 0, Get.find<ProfileController>().recordLocationBody?.longitude ?? 0),
-              northeast: LatLng(
-                double.parse(orderModel.deliveryAddress?.latitude ?? '0'),
-                double.parse(orderModel.deliveryAddress?.latitude ?? '0'),
-              ),
-            );
-          }
+      if (_controller != null) {
+        double deliveryLat = double.parse(orderModel.deliveryAddress?.latitude ?? '0');
+        double deliveryLng = double.parse(orderModel.deliveryAddress?.longitude ?? '0');
+        double storeLat = double.parse(orderModel.storeLat ?? '0');
+        double storeLng = double.parse(orderModel.storeLng ?? '0');
+        double receiverLat = double.parse(orderModel.receiverDetails?.latitude ?? '0');
+        double receiverLng = double.parse(orderModel.receiverDetails?.longitude ?? '0');
+        double deliveryManLat = Get.find<ProfileController>().recordLocationBody?.latitude ?? 0;
+        double deliveryManLng = Get.find<ProfileController>().recordLocationBody?.longitude ?? 0;
+
+        // Determine bounds based on locations
+        if (parcel) {
+          bounds = LatLngBounds(
+            southwest: LatLng(
+              min(deliveryLat, min(receiverLat, deliveryManLat)),
+              min(deliveryLng, min(receiverLng, deliveryManLng)),
+            ),
+            northeast: LatLng(
+              max(deliveryLat, max(receiverLat, deliveryManLat)),
+              max(deliveryLng, max(receiverLng, deliveryManLng)),
+            ),
+          );
         } else {
-          if ((Get.find<ProfileController>().recordLocationBody?.latitude ?? 0) < double.parse(orderModel.storeLat ?? '0')) {
-            bounds = LatLngBounds(
-              southwest: LatLng(Get.find<ProfileController>().recordLocationBody?.latitude ?? 0, Get.find<ProfileController>().recordLocationBody?.latitude ?? 0),
-              northeast: LatLng(double.parse(orderModel.storeLat ?? '0'), double.parse(orderModel.storeLng ?? '0')),
-            );
-          } else {
-            bounds = LatLngBounds(
-              southwest: LatLng(double.parse(orderModel.storeLat ?? '0'), double.parse(orderModel.storeLng ?? '0')),
-              northeast: LatLng(Get.find<ProfileController>().recordLocationBody?.latitude ?? 0, Get.find<ProfileController>().recordLocationBody?.longitude ?? 0),
-            );
-          }
+          bounds = LatLngBounds(
+            southwest: LatLng(
+              min(deliveryLat, min(storeLat, deliveryManLat)),
+              min(deliveryLng, min(storeLng, deliveryManLng)),
+            ),
+            northeast: LatLng(
+              max(deliveryLat, max(storeLat, deliveryManLat)),
+              max(deliveryLng, max(storeLng, deliveryManLng)),
+            ),
+          );
+        }
+
+        LatLng centerBounds = LatLng(
+          (bounds.northeast.latitude + bounds.southwest.latitude) / 2,
+          (bounds.northeast.longitude + bounds.southwest.longitude) / 2,
+        );
+
+        if (kDebugMode) {
+          print('center bound $centerBounds');
+        }
+
+        // Zoom to fit bounds
+        _controller!.moveCamera(CameraUpdate.newLatLngBounds(bounds, 50));
+
+        // Clear previous markers
+        _markers.clear();
+
+        // Add destination marker (delivery address for normal, sender for parcel)
+        if (orderModel.deliveryAddress != null) {
+          _markers.add(Marker(
+            markerId: const MarkerId('destination'),
+            position: LatLng(deliveryLat, deliveryLng),
+            infoWindow: InfoWindow(
+              title: parcel ? 'Sender' : 'Destination',
+              snippet: orderModel.deliveryAddress?.address,
+            ),
+            icon: BitmapDescriptor.bytes(destinationImageData, height: 40, width: 40),
+          ));
+        }
+
+        // Add receiver marker for parcel order
+        if (parcel && orderModel.receiverDetails != null) {
+          _markers.add(Marker(
+            markerId: const MarkerId('receiver'),
+            position: LatLng(receiverLat, receiverLng),
+            infoWindow: InfoWindow(
+              title: 'Receiver',
+              snippet: orderModel.receiverDetails?.address,
+            ),
+            icon: BitmapDescriptor.bytes(restaurantImageData, height: 40, width: 40),
+          ));
+        }
+
+        // Add store marker for normal order
+        if (!parcel && orderModel.storeLat != null && orderModel.storeLng != null) {
+          _markers.add(Marker(
+            markerId: const MarkerId('store'),
+            position: LatLng(storeLat, storeLng),
+            infoWindow: InfoWindow(
+              title: orderModel.storeName,
+              snippet: orderModel.storeAddress,
+            ),
+            icon: BitmapDescriptor.bytes(restaurantImageData, height: 40, width: 40),
+          ));
+        }
+
+        // Add delivery boy marker
+        if (Get.find<ProfileController>().recordLocationBody != null) {
+          _markers.add(Marker(
+            markerId: const MarkerId('delivery_boy'),
+            position: LatLng(deliveryManLat, deliveryManLng),
+            infoWindow: InfoWindow(
+              title: 'delivery_man'.tr,
+              snippet: Get.find<ProfileController>().recordLocationBody?.location,
+            ),
+            icon: BitmapDescriptor.bytes(deliveryBoyImageData, height: 40, width: 40),
+          ));
         }
       }
-      LatLng centerBounds = LatLng(
-        (bounds!.northeast.latitude + bounds.southwest.latitude)/2,
-        (bounds.northeast.longitude + bounds.southwest.longitude)/2,
-      );
-
-      _controller!.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: centerBounds, zoom: GetPlatform.isWeb ? 10 : 17)));
-      await zoomToFit(_controller, bounds, centerBounds, padding: 1.5);
-
-      /// user for normal order , but sender for parcel order
-      _markers = HashSet<Marker>();
-      orderModel.deliveryAddress != null ? _markers.add(Marker(
-        markerId: const MarkerId('destination'),
-        position: LatLng(double.parse(orderModel.deliveryAddress?.latitude ?? '0'), double.parse(orderModel.deliveryAddress?.longitude ?? '0')),
-        infoWindow: InfoWindow(
-          title: parcel ? 'Sender' : 'Destination',
-          snippet: orderModel.deliveryAddress?.address,
-        ),
-        icon: BitmapDescriptor.fromBytes(destinationImageData),
-      )) : const SizedBox();
-
-      ///store for normal order , but receiver for parcel order
-      orderModel.storeLat != null || orderModel.receiverDetails != null ? _markers.add(Marker(
-        markerId: const MarkerId('restaurant'),
-        position: LatLng(
-          double.parse(parcel ? orderModel.receiverDetails?.latitude ?? '0' : orderModel.storeLat ?? '0'),
-          double.parse(parcel ? orderModel.receiverDetails?.longitude ?? '0' : orderModel.storeLng ?? '0'),
-        ),
-        infoWindow: InfoWindow(
-          title: parcel ? 'Receiver' : orderModel.storeName,
-          snippet: parcel ? orderModel.receiverDetails?.address : orderModel.storeAddress,
-        ),
-        icon: BitmapDescriptor.fromBytes(restaurantImageData),
-      )) : const SizedBox();
-
-      Get.find<ProfileController>().recordLocationBody != null ? _markers.add(Marker(
-        markerId: const MarkerId('delivery_boy'),
-        position: LatLng(Get.find<ProfileController>().recordLocationBody?.latitude ?? 0, Get.find<ProfileController>().recordLocationBody?.longitude ?? 0),
-        infoWindow: InfoWindow(
-          title: 'delivery_man'.tr,
-          snippet: Get.find<ProfileController>().recordLocationBody?.location,
-        ),
-        // rotation: rotation,
-        icon: BitmapDescriptor.fromBytes(deliveryBoyImageData),
-      )) : const SizedBox();
-    }catch(_) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error setting markers: $e');
+      }
+    }
     setState(() {});
   }
 
@@ -171,40 +188,5 @@ class _OrderLocationScreenState extends State<OrderLocationScreen> {
     Codec codec = await instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
     FrameInfo fi = await codec.getNextFrame();
     return (await fi.image.toByteData(format: ImageByteFormat.png))!.buffer.asUint8List();
-  }
-
-  Future<void> zoomToFit(GoogleMapController? controller, LatLngBounds? bounds, LatLng centerBounds, {double padding = 0.5}) async {
-    bool keepZoomingOut = true;
-
-    while(keepZoomingOut) {
-      final LatLngBounds screenBounds = await controller!.getVisibleRegion();
-      if(fits(bounds!, screenBounds)){
-        keepZoomingOut = false;
-        final double zoomLevel = await controller.getZoomLevel() - padding;
-        controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-          target: centerBounds,
-          zoom: zoomLevel,
-        )));
-        break;
-      }
-      else {
-        // Zooming out by 0.1 zoom level per iteration
-        final double zoomLevel = await controller.getZoomLevel() - 0.1;
-        controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-          target: centerBounds,
-          zoom: zoomLevel,
-        )));
-      }
-    }
-  }
-
-  bool fits(LatLngBounds fitBounds, LatLngBounds screenBounds) {
-    final bool northEastLatitudeCheck = screenBounds.northeast.latitude >= fitBounds.northeast.latitude;
-    final bool northEastLongitudeCheck = screenBounds.northeast.longitude >= fitBounds.northeast.longitude;
-
-    final bool southWestLatitudeCheck = screenBounds.southwest.latitude <= fitBounds.southwest.latitude;
-    final bool southWestLongitudeCheck = screenBounds.southwest.longitude <= fitBounds.southwest.longitude;
-
-    return northEastLatitudeCheck && northEastLongitudeCheck && southWestLatitudeCheck && southWestLongitudeCheck;
   }
 }

@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart_delivery/features/language/controllers/language_controller.dart';
 import 'package:sixam_mart_delivery/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart_delivery/common/controllers/theme_controller.dart';
@@ -30,13 +32,10 @@ Future<void> main() async {
   if(GetPlatform.isAndroid) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyDwdLNqrd8Is1i_q8BQWxXVbJshwHzAdsg",
-        authDomain: "secret-lambda-403915.firebaseapp.com",
-        projectId: "secret-lambda-403915",
-        storageBucket: "secret-lambda-403915.appspot.com",
-        messagingSenderId: "215254213048",
-        appId: "1:215254213048:android:f0dae0b33ad2d269556f4d",
-        measurementId: "G-R8QTGD955W",
+        apiKey: "AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA",
+        appId: "1:491987943015:android:fe79b69339834d5c8f1ec2",
+        messagingSenderId: "491987943015",
+        projectId: "stackmart-500c7",
       ),
     );
   }else {
@@ -65,8 +64,31 @@ class MyApp extends StatelessWidget {
   final NotificationBodyModel? body;
   const MyApp({super.key, required this.languages, this.body});
 
+  void _route() {
+    Get.find<SplashController>().getConfigData().then((bool isSuccess) async {
+      if (isSuccess) {
+        if (Get.find<AuthController>().isLoggedIn()) {
+          Get.find<AuthController>().updateToken();
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if(GetPlatform.isWeb) {
+      Get.find<SplashController>().initSharedData();
+      _route();
+    }
+
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.black,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ));
+
     return GetBuilder<ThemeController>(builder: (themeController) {
       return GetBuilder<LocalizationController>(builder: (localizeController) {
         return GetBuilder<SplashController>(builder: (splashController) {

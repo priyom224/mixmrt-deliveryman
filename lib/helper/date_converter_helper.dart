@@ -78,14 +78,4 @@ class DateConverterHelper {
     return DateFormat('yyyy-MM-dd').format(dateTime);
   }
 
-  static String formatDateTime(String timestamp) {
-    // Parse the timestamp string into a DateTime object
-    DateTime dateTime = DateTime.parse(timestamp);
-
-    // Format the DateTime object
-    String formattedDateTime = DateFormat.yMMMMEEEEd().add_jms().format(dateTime);
-
-    return formattedDateTime;
-  }
-
 }

@@ -1,5 +1,9 @@
+import 'package:sixam_mart_delivery/common/widgets/custom_bottom_sheet_widget.dart';
 import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
+import 'package:sixam_mart_delivery/features/language/controllers/language_controller.dart';
+import 'package:sixam_mart_delivery/features/language/widgets/language_bottom_sheet_widget.dart';
 import 'package:sixam_mart_delivery/features/profile/controllers/profile_controller.dart';
+import 'package:sixam_mart_delivery/features/profile/widgets/notification_status_change_bottom_sheet.dart';
 import 'package:sixam_mart_delivery/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart_delivery/common/controllers/theme_controller.dart';
 import 'package:sixam_mart_delivery/helper/route_helper.dart';
@@ -72,12 +76,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }),
               const SizedBox(height: Dimensions.paddingSizeSmall),
 
-              ProfileButtonWidget(
-                icon: Icons.notifications, title: 'notification'.tr,
-                isButtonActive: Get.find<AuthController>().notification, onTap: () {
-                Get.find<AuthController>().setNotificationActive(!Get.find<AuthController>().notification);
-                },
-              ),
+              GetBuilder<AuthController>(builder: (authController) {
+                return ProfileButtonWidget(
+                  icon: Icons.notifications, title: 'notification'.tr,
+                  isButtonActive: authController.notification, onTap: () {
+                  showCustomBottomSheet(child: const NotificationStatusChangeBottomSheet());
+                  },
+                );
+              }),
               const SizedBox(height: Dimensions.paddingSizeSmall),
 
               ProfileButtonWidget(icon: Icons.chat_bubble, title: 'conversation'.tr, onTap: () {
@@ -92,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }),
               ) : const SizedBox(),
 
-              //if(Get.find<SplashController>().configModel!.disbursementType == 'automated' && profileController.profileModel!.type != 'store_wise' && profileController.profileModel!.earnings != 0)
+              if(Get.find<SplashController>().configModel!.disbursementType == 'automated' && profileController.profileModel!.type != 'store_wise' && profileController.profileModel!.earnings != 0)
                 Column(children: [
                   Padding(
                     padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
@@ -107,10 +113,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: Dimensions.paddingSizeSmall),
                 ]),
 
-              /*ProfileButton(icon: Icons.language, title: 'language'.tr, onTap: () {
-                Get.toNamed(RouteHelper.getLanguageRoute());
+              ProfileButtonWidget(icon: Icons.language, title: 'language'.tr, onTap: () {
+                _manageLanguageFunctionality();
               }),
-              const SizedBox(height: Dimensions.paddingSizeSmall),*/
+              const SizedBox(height: Dimensions.paddingSizeSmall),
 
               ProfileButtonWidget(icon: Icons.lock, title: 'change_password'.tr, onTap: () {
                 Get.toNamed(RouteHelper.getResetPasswordRoute('', '', 'password-change'));
@@ -166,4 +172,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }),
     );
   }
+
+  _manageLanguageFunctionality() {
+    Get.find<LocalizationController>().saveCacheLanguage(null);
+    Get.find<LocalizationController>().searchSelectedLanguage();
+
+    showModalBottomSheet(
+      isScrollControlled: true, useRootNavigator: true, context: Get.context!,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(Dimensions.radiusExtraLarge), topRight: Radius.circular(Dimensions.radiusExtraLarge)),
+      ),
+      builder: (context) {
+        return ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+          child: const LanguageBottomSheetWidget(),
+        );
+      },
+    ).then((value) => Get.find<LocalizationController>().setLanguage(Get.find<LocalizationController>().getCacheLocaleFromSharedPref()));
+  }
+
 }

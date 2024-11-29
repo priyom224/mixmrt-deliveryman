@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
-import 'package:sixam_mart_delivery/features/cash_in_hand/widgets/offline_payment_button.dart';
 import 'package:sixam_mart_delivery/features/profile/controllers/profile_controller.dart';
 import 'package:sixam_mart_delivery/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart_delivery/features/cash_in_hand/controllers/cash_in_hand_controller.dart';
-import 'package:sixam_mart_delivery/helper/route_helper.dart';
 import 'package:sixam_mart_delivery/util/dimensions.dart';
 import 'package:sixam_mart_delivery/util/styles.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_button_widget.dart';
@@ -20,14 +16,6 @@ class PaymentMethodBottomSheetWidget extends StatefulWidget {
 }
 
 class _PaymentMethodBottomSheetWidgetState extends State<PaymentMethodBottomSheetWidget> {
-  final JustTheController tooltipController = JustTheController();
-
-  @override
-  void initState() {
-    super.initState();
-    Get.find<CashInHandController>().getOfflineMethodList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -76,66 +64,53 @@ class _PaymentMethodBottomSheetWidgetState extends State<PaymentMethodBottomShee
           Flexible(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ListView.builder(
-                    itemCount: Get.find<SplashController>().configModel!.activePaymentMethodList!.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index){
-                      bool isSelected = cashInHandController.paymentIndex == 1 && Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWay! == cashInHandController.digitalPaymentName;
-                      return InkWell(
-                        onTap: (){
-                          cashInHandController.setPaymentIndex(1);
-                          cashInHandController.changeDigitalPaymentName(Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWay!);
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                            border: Border.all(color: Theme.of(context).disabledColor.withOpacity(0.4)),
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeLarge),
-                          child: Row(children: [
-                            Container(
-                              height: 20, width: 20,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle, color: isSelected ? Colors.green : Theme.of(context).cardColor,
-                                  border: Border.all(color: Theme.of(context).disabledColor)
-                              ),
-                              child: Icon(Icons.check, color: Theme.of(context).cardColor, size: 16),
-                            ),
-                            const SizedBox(width: Dimensions.paddingSizeDefault),
+              child: ListView.builder(
+                itemCount: Get.find<SplashController>().configModel!.activePaymentMethodList!.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index){
 
-                            Text(
-                              Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWayTitle!,
-                              style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault),
-                            ),
-                            const Spacer(),
+                  bool isSelected = cashInHandController.paymentIndex == 1 && Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWay! == cashInHandController.digitalPaymentName;
 
-                            CustomImageWidget(
-                              height: 20, fit: BoxFit.contain,
-                              image: '${Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWayImageFullUrl}',
-                            ),
-
-                          ]),
-                        ),
-                      );
+                  return InkWell(
+                    onTap: (){
+                      cashInHandController.setPaymentIndex(1);
+                      cashInHandController.changeDigitalPaymentName(Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWay!);
                     },
-                  ),
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                        border: Border.all(color: Theme.of(context).disabledColor.withOpacity(0.4)),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeLarge),
+                      child: Row(children: [
+                        Container(
+                          height: 20, width: 20,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: isSelected ? Colors.green : Theme.of(context).cardColor,
+                            border: Border.all(color: Theme.of(context).disabledColor),
+                          ),
+                          child: Icon(Icons.check, color: Theme.of(context).cardColor, size: 16),
+                        ),
+                        const SizedBox(width: Dimensions.paddingSizeDefault),
 
-                  cashInHandController.offlineMethodList == null ? const SizedBox() : OfflinePaymentButton(
-                    isSelected: cashInHandController.paymentIndex == 2,
-                    offlineMethodList: cashInHandController.offlineMethodList!,
-                    tooltipController: tooltipController,
-                    cashInHandController: cashInHandController,
-                    onTap: () => cashInHandController.setPaymentIndex(2),
-                  ),
+                        Text(
+                          Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWayTitle!,
+                          style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault),
+                        ),
+                        const Spacer(),
 
+                        CustomImageWidget(
+                          height: 20, fit: BoxFit.contain,
+                          image: '${Get.find<SplashController>().configModel!.activePaymentMethodList![index].getWayImageFullUrl}',
+                        ),
 
-                ],
+                      ]),
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -147,15 +122,8 @@ class _PaymentMethodBottomSheetWidgetState extends State<PaymentMethodBottomShee
                 radius: Dimensions.radiusDefault,
                 buttonText: 'select'.tr,
                 onPressed: () {
-                  if(cashInHandController.paymentIndex == 1){
-                    double amount = Get.find<ProfileController>().profileModel!.payableBalance!;
-                    cashInHandController.makeCollectCashPayment(amount, cashInHandController.digitalPaymentName!);
-                  }else if(cashInHandController.paymentIndex == 2){
-                    Get.toNamed(RouteHelper.getOfflinePaymentScreen(total: Get.find<ProfileController>().profileModel!.cashInHands!,));
-                  }
-                  else {
-                    Get.back();
-                  }
+                  double amount = Get.find<ProfileController>().profileModel!.payableBalance!;
+                  cashInHandController.makeCollectCashPayment(amount, cashInHandController.digitalPaymentName!);
                 }
               ),
             ),

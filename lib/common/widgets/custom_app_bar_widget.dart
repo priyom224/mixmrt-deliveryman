@@ -9,13 +9,12 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSizeWidget 
   final bool isBackButtonExist;
   final Function? onBackPressed;
   final Widget? actionWidget;
-  final Widget? menuWidget;
-  const CustomAppBarWidget({super.key, required this.title, this.isBackButtonExist = true, this.onBackPressed, this.actionWidget, this.menuWidget});
+  const CustomAppBarWidget({super.key, required this.title, this.isBackButtonExist = true, this.onBackPressed, this.actionWidget});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyLarge!.color)),
+      title: Text(title, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyLarge!.color)),
       centerTitle: true,
       leading: isBackButtonExist ? IconButton(
         icon: const Icon(Icons.arrow_back_ios),
@@ -31,9 +30,10 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSizeWidget 
         } ,
       ) : const SizedBox(),
       backgroundColor: Theme.of(context).cardColor,
-      elevation: 0,
-
-      actions: menuWidget != null ? [menuWidget!] : [
+      surfaceTintColor: Theme.of(context).cardColor,
+      shadowColor: Theme.of(context).disabledColor.withOpacity(0.5),
+      elevation: 2,
+      actions: [
         Padding(
           padding: const EdgeInsets.only(right: Dimensions.paddingSizeDefault),
           child: actionWidget ?? const SizedBox(),

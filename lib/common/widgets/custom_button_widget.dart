@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:sixam_mart_delivery/util/dimensions.dart';
 import 'package:sixam_mart_delivery/util/styles.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +12,10 @@ class CustomButtonWidget extends StatelessWidget {
   final double? fontSize;
   final IconData? icon;
   final Color? backgroundColor;
-  final bool isLoading;
   final Color? fontColor;
   final double radius;
   const CustomButtonWidget({super.key, this.onPressed, required this.buttonText, this.transparent = false, this.margin, this.width, this.height,
-    this.fontSize, this.icon, this.backgroundColor, this.fontColor, this.radius = Dimensions.radiusSmall, this.isLoading = false});
+    this.fontSize, this.icon, this.backgroundColor, this.fontColor, this.radius = Dimensions.radiusSmall + 3});
 
   @override
   Widget build(BuildContext context) {
@@ -33,22 +31,9 @@ class CustomButtonWidget extends StatelessWidget {
     return Padding(
       padding: margin == null ? const EdgeInsets.all(0) : margin!,
       child: TextButton(
-        onPressed: isLoading ? null : onPressed as void Function()?,
+        onPressed: onPressed as void Function()?,
         style: flatButtonStyle,
-        child:  isLoading ?
-        Center(child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const SizedBox(
-            height: 15, width: 15,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              strokeWidth: 2,
-            ),
-          ),
-          const SizedBox(width: Dimensions.paddingSizeSmall),
-
-          Text('loading'.tr, style: robotoMedium.copyWith(color: Colors.white)),
-        ]),
-        ) : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
 
           icon != null ? Icon(
             icon, color: transparent ? Theme.of(context).primaryColor : Theme.of(context).cardColor, size: 20,

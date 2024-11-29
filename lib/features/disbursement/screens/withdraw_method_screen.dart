@@ -31,30 +31,22 @@ class _WithdrawMethodScreenState extends State<WithdrawMethodScreen> {
   initCall() async {
 
     Get.find<DisbursementController>().getWithdrawMethodList();
-    Get.find<DisbursementController>().getDisbursementMethodList();
     disbursementHelper.enableDisbursementWarningMessage(false, canShowDialog: !widget.isFromDashboard);
   }
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<DisbursementController>(builder: (disbursementController) {
-      return Scaffold(
-        appBar: CustomAppBarWidget(title: 'disbursement_methods'.tr),
+    return Scaffold(
+      appBar: CustomAppBarWidget(title: 'disbursement_methods'.tr),
 
-        floatingActionButton: Align(
-          alignment: Alignment.bottomCenter,
-          child: FloatingActionButton.extended(
-            onPressed: disbursementController.disbursementMethodBody != null && disbursementController.disbursementMethodBody!.methods!.isNotEmpty
-                && (disbursementController.disbursementMethodBody!.methods!.length >= 2) ? null : () {
-              Get.toNamed(RouteHelper.getAddWithdrawMethodRoute());
-            },
-            backgroundColor: disbursementController.disbursementMethodBody != null && disbursementController.disbursementMethodBody!.methods!.isNotEmpty
-                && (disbursementController.disbursementMethodBody!.methods!.length >= 2) ? Theme.of(context).disabledColor : Theme.of(context).primaryColor,
-            label: Text('add_payment_method'.tr, style: robotoMedium.copyWith(color: Theme.of(context).cardColor)),
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.toNamed(RouteHelper.getAddWithdrawMethodRoute()),
+        backgroundColor: Theme.of(context).primaryColor,
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
 
-        body: disbursementController.disbursementMethodBody != null ? disbursementController.disbursementMethodBody!.methods!.isNotEmpty ? ListView.builder(
+      body: GetBuilder<DisbursementController>(builder: (disbursementController) {
+        return disbursementController.disbursementMethodBody != null ? disbursementController.disbursementMethodBody!.methods!.isNotEmpty ? ListView.builder(
           itemCount: disbursementController.disbursementMethodBody!.methods!.length,
           shrinkWrap: true,
           padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
@@ -72,7 +64,7 @@ class _WithdrawMethodScreenState extends State<WithdrawMethodScreen> {
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeExtraSmall),
-                  child: Row(/*mainAxisAlignment: MainAxisAlignment.spaceBetween, */children: [
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
 
                     Flexible(
                       child: Text(
@@ -89,7 +81,7 @@ class _WithdrawMethodScreenState extends State<WithdrawMethodScreen> {
                       ),
                       padding: const EdgeInsets.all(Dimensions.fontSizeSmall),
                       child: Text('default_method'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor),),
-                    ) : const SizedBox(), /*InkWell(
+                    ) : InkWell(
                       onTap: () {
                         disbursementController.makeDefaultMethod({'id': '${method.id}', 'is_default': '1'}, index);
                       },
@@ -103,7 +95,7 @@ class _WithdrawMethodScreenState extends State<WithdrawMethodScreen> {
                           ? Text('make_default'.tr, style: robotoMedium.copyWith(color: Theme.of(context).cardColor))
                           : SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Theme.of(context).cardColor)),
                       ),
-                    ),*/
+                    ),
 
                   ]),
                 ),
@@ -144,7 +136,7 @@ class _WithdrawMethodScreenState extends State<WithdrawMethodScreen> {
                     ),
                     const SizedBox(width: Dimensions.paddingSizeDefault),
 
-                    method.isDefault == false ? InkWell(
+                    InkWell(
                       onTap: () {
                         Get.dialog(ConfirmDialogWidget(id: method.id!));
                       },
@@ -152,7 +144,7 @@ class _WithdrawMethodScreenState extends State<WithdrawMethodScreen> {
                         padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeDefault),
                         child: Icon(CupertinoIcons.delete, color: Theme.of(context).colorScheme.error, size: 20),
                       ),
-                    ) : const SizedBox(),
+                    )
                   ]),
                 ),
 
@@ -160,8 +152,8 @@ class _WithdrawMethodScreenState extends State<WithdrawMethodScreen> {
 
             );
           },
-        ) : Center(child: Text('no_method_found'.tr, style: robotoMedium)) : const Center(child: CircularProgressIndicator()),
-      );
-    });
+        ) : Center(child: Text('no_method_found'.tr, style: robotoMedium)) : const Center(child: CircularProgressIndicator());
+      }),
+    );
   }
 }

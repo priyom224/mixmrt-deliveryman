@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
-import 'package:sixam_mart_delivery/features/cash_in_hand/widgets/offline_list_widget.dart';
-import 'package:sixam_mart_delivery/features/cash_in_hand/widgets/transaction_details_bottom_sheet.dart';
 import 'package:sixam_mart_delivery/features/profile/controllers/profile_controller.dart';
 import 'package:sixam_mart_delivery/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart_delivery/features/cash_in_hand/controllers/cash_in_hand_controller.dart';
@@ -34,7 +32,6 @@ class _CashInHandScreenState extends State<CashInHandScreen> {
     Get.find<ProfileController>().getProfile();
     Get.find<CashInHandController>().getWalletPaymentList();
     Get.find<CashInHandController>().getWalletProvidedEarningList();
-    Get.find<CashInHandController>().getOfflineList();
     super.initState();
   }
 
@@ -269,94 +266,62 @@ class _CashInHandScreenState extends State<CashInHandScreen> {
 
                       ]),
 
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: Dimensions.paddingSizeExtraLarge),
-                          child: Row(children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: Dimensions.paddingSizeExtraLarge),
+                        child: Row(children: [
 
-                            InkWell(
-                              onTap: () {
-                                if(cashInHandController.selectedIndex != 0) {
-                                  cashInHandController.setIndex(0);
-                                }
-                              },
-                              hoverColor: Colors.transparent,
-                              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          InkWell(
+                            onTap: () {
+                              if(cashInHandController.selectedIndex != 0) {
+                                cashInHandController.setIndex(0);
+                              }
+                            },
+                            hoverColor: Colors.transparent,
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
-                                Text('payment_history'.tr, style: robotoMedium.copyWith(
-                                  color: cashInHandController.selectedIndex == 0 ? Colors.blue : Theme.of(context).disabledColor,
-                                )),
-                                const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                              Text('payment_history'.tr, style: robotoMedium.copyWith(
+                                color: cashInHandController.selectedIndex == 0 ? Colors.blue : Theme.of(context).disabledColor,
+                              )),
+                              const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                                Container(
-                                  height: 3, width: 110,
-                                  margin: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                    color: cashInHandController.selectedIndex == 0 ? Colors.blue : null,
-                                  ),
+                              Container(
+                                height: 3, width: 110,
+                                margin: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                  color: cashInHandController.selectedIndex == 0 ? Colors.blue : null,
                                 ),
+                              ),
 
-                              ]),
-                            ),
-                            const SizedBox(width: Dimensions.paddingSizeSmall),
+                            ]),
+                          ),
+                          const SizedBox(width: Dimensions.paddingSizeSmall),
 
-                            InkWell(
-                              onTap: () {
-                                if(cashInHandController.selectedIndex != 1) {
-                                  cashInHandController.setIndex(1);
-                                }
-                              },
-                              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          InkWell(
+                            onTap: () {
+                              if(cashInHandController.selectedIndex != 1) {
+                                cashInHandController.setIndex(1);
+                              }
+                            },
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
-                                Text('wallet_provided_earning'.tr, style: robotoMedium.copyWith(
-                                  color: cashInHandController.selectedIndex == 1 ? Colors.blue : Theme.of(context).disabledColor,
-                                )),
-                                const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                              Text('wallet_provided_earning'.tr, style: robotoMedium.copyWith(
+                                color: cashInHandController.selectedIndex == 1 ? Colors.blue : Theme.of(context).disabledColor,
+                              )),
+                              const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                                Container(
-                                  height: 3, width: 150,
-                                  margin: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                    color: cashInHandController.selectedIndex == 1 ? Colors.blue : null,
-                                  ),
+                              Container(
+                                height: 3, width: 150,
+                                margin: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                  color: cashInHandController.selectedIndex == 1 ? Colors.blue : null,
                                 ),
+                              ),
 
-                              ]),
-                            ),
-                            const SizedBox(width: Dimensions.paddingSizeSmall),
-
-                            InkWell(
-                              onTap: () {
-                                if(cashInHandController.selectedIndex != 2) {
-                                  cashInHandController.setIndex(2);
-                                }
-                              },
-                              hoverColor: Colors.transparent,
-                              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-                                Text('offline_history'.tr, style: robotoMedium.copyWith(
-                                  color: cashInHandController.selectedIndex == 2 ? Colors.blue : Theme.of(context).disabledColor,
-                                )),
-                                const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-                                Container(
-                                  height: 3, width: 105,
-                                  margin: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                    color: cashInHandController.selectedIndex == 2 ? Colors.blue : null,
-                                  ),
-                                ),
-
-                              ]),
-                            ),
-                            const SizedBox(width: Dimensions.paddingSizeSmall),
-
-                          ]),
-                        ),
+                            ]),
+                          ),
+                        ]),
                       ),
                       const SizedBox(height: Dimensions.paddingSizeSmall),
 
@@ -372,9 +337,6 @@ class _CashInHandScreenState extends State<CashInHandScreen> {
                             }
                             if(cashInHandController.selectedIndex == 1) {
                               Get.toNamed(RouteHelper.getWalletProvidedEarningRoute());
-                            }
-                            if(cashInHandController.selectedIndex == 2) {
-                              Get.toNamed(RouteHelper.getOffLineHistoryRoute());
                             }
 
                           },
@@ -397,43 +359,23 @@ class _CashInHandScreenState extends State<CashInHandScreen> {
                           itemBuilder: (context, index) {
                           return Column(children: [
 
-                            InkWell(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  isScrollControlled: true, useRootNavigator: true, context: context,
-                                  backgroundColor: Colors.white,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(Dimensions.radiusExtraLarge),
-                                      topRight: Radius.circular(Dimensions.radiusExtraLarge),
-                                    ),
-                                  ),
-                                  builder: (context) {
-                                    return ConstrainedBox(
-                                      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
-                                      child: TransactionDetailsBottomSheetWidget(transactions: cashInHandController.transactions![index], fromTransaction: true),
-                                    );
-                                  },
-                                );
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeLarge),
-                                child: Row(children: [
-                                  Expanded(
-                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                      Text(PriceConverterHelper.convertPrice(cashInHandController.transactions![index].amount), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault), textDirection: TextDirection.ltr,),
-                                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeLarge),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                    Text(PriceConverterHelper.convertPrice(cashInHandController.transactions![index].amount), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault), textDirection: TextDirection.ltr,),
+                                    const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                                      Text('${'paid_via'.tr} ${cashInHandController.transactions![index].method?.replaceAll('_', ' ').capitalize??''}', style: robotoRegular.copyWith(
-                                        fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
-                                      )),
-                                    ]),
-                                  ),
-                                  Text(cashInHandController.transactions![index].paymentTime.toString(),
-                                    style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
-                                  ),
-                                ]),
-                              ),
+                                    Text('${'paid_via'.tr} ${cashInHandController.transactions![index].method?.replaceAll('_', ' ').capitalize??''}', style: robotoRegular.copyWith(
+                                      fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
+                                    )),
+                                  ]),
+                                ),
+                                Text(cashInHandController.transactions![index].paymentTime.toString(),
+                                  style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
+                                ),
+                              ]),
                             ),
 
                             const Divider(height: 1),
@@ -450,52 +392,32 @@ class _CashInHandScreenState extends State<CashInHandScreen> {
                           itemBuilder: (context, index) {
                             return Column(children: [
 
-                              InkWell(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    isScrollControlled: true, useRootNavigator: true, context: context,
-                                    backgroundColor: Colors.white,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(Dimensions.radiusExtraLarge),
-                                        topRight: Radius.circular(Dimensions.radiusExtraLarge),
-                                      ),
-                                    ),
-                                    builder: (context) {
-                                      return ConstrainedBox(
-                                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
-                                        child: TransactionDetailsBottomSheetWidget(transactions: cashInHandController.walletProvidedTransactions![index], fromTransaction: true),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeLarge),
-                                  child: Row(children: [
-                                    Expanded(
-                                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                        Text(PriceConverterHelper.convertPrice(cashInHandController.walletProvidedTransactions![index].amount), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault), textDirection: TextDirection.ltr,),
-                                        const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-                                        Text('${'wallet'.tr} ${cashInHandController.walletProvidedTransactions![index].method?.replaceAll('_', ' ').capitalize??''}', style: robotoRegular.copyWith(
-                                          fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
-                                        )),
-                                      ]),
-                                    ),
-                                    Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                                      Text(cashInHandController.walletProvidedTransactions![index].paymentTime.toString(),
-                                        style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
-                                      ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeLarge),
+                                child: Row(children: [
+                                  Expanded(
+                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                      Text(PriceConverterHelper.convertPrice(cashInHandController.walletProvidedTransactions![index].amount), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault), textDirection: TextDirection.ltr,),
                                       const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                                      Text(cashInHandController.walletProvidedTransactions![index].status!.tr, style: robotoRegular.copyWith(
-                                        fontSize: Dimensions.fontSizeSmall,
-                                        color: cashInHandController.walletProvidedTransactions![index].status == 'approved' ? Theme.of(context).primaryColor : cashInHandController.walletProvidedTransactions![index].status == 'denied'
-                                            ? Theme.of(context).colorScheme.error : Colors.blue,
+                                      Text('${'wallet'.tr} ${cashInHandController.walletProvidedTransactions![index].method?.replaceAll('_', ' ').capitalize??''}', style: robotoRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
                                       )),
                                     ]),
+                                  ),
+                                  Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                                    Text(cashInHandController.walletProvidedTransactions![index].paymentTime.toString(),
+                                      style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
+                                    ),
+                                    const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+
+                                    Text(cashInHandController.walletProvidedTransactions![index].status!.tr, style: robotoRegular.copyWith(
+                                      fontSize: Dimensions.fontSizeSmall,
+                                      color: cashInHandController.walletProvidedTransactions![index].status == 'approved' ? Theme.of(context).primaryColor : cashInHandController.walletProvidedTransactions![index].status == 'denied'
+                                          ? Theme.of(context).colorScheme.error : Colors.blue,
+                                    )),
                                   ]),
-                                ),
+                                ]),
                               ),
 
                               const Divider(height: 1),
@@ -503,21 +425,6 @@ class _CashInHandScreenState extends State<CashInHandScreen> {
                           },
                         ) : Center(child: Padding(padding: const EdgeInsets.only(top: 250), child: Text('no_transaction_found'.tr)))
                             : const Center(child: Padding(padding: EdgeInsets.only(top: 250), child: CircularProgressIndicator())),
-
-                      if(cashInHandController.selectedIndex == 2)
-                        cashInHandController.offlineHistoryList != null ? cashInHandController.offlineHistoryList!.isNotEmpty ? ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: cashInHandController.offlineHistoryList!.length > 10 ? 10 : cashInHandController.offlineHistoryList!.length,
-                          itemBuilder: (context, index) {
-                            return OfflineListWidget(
-                              offlineListModel: cashInHandController.offlineHistoryList![index],
-                              showDivider: index != (cashInHandController.offlineHistoryList!.length > 25 ? 25 : cashInHandController.offlineHistoryList!.length-1),
-                            );
-                          },
-                        ) : Center(child: Padding(padding: const EdgeInsets.only(top: 100), child: Text('no_transaction_found'.tr)))
-                            : const Center(child: Padding(padding: EdgeInsets.only(top: 100), child: CircularProgressIndicator())),
-
 
                     ]),
 

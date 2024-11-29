@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:sixam_mart_delivery/features/cash_in_hand/screens/offline_history_screen.dart';
-import 'package:sixam_mart_delivery/features/cash_in_hand/screens/offline_payment_screen.dart';
 import 'package:sixam_mart_delivery/features/notification/domain/models/notification_body_model.dart';
 import 'package:sixam_mart_delivery/features/chat/domain/models/conversation_model.dart';
 import 'package:sixam_mart_delivery/features/auth/screens/sign_in_screen.dart';
@@ -56,10 +54,6 @@ class RouteHelper {
   static const String transactionHistory = '/transaction-history';
   static const String cashInHand = '/cash-in-hand';
   static const String walletProvidedEarning = '/wallet-provided-earning';
-  static const String offlineHistory = '/offline-history';
-  static const String offlinePaymentScreen = '/offline-payment-screen';
-  static const String agreement = '/agreement';
-
 
   static String getInitialRoute({bool? fromOrderDetails}) => '$initial?from_order_details=${fromOrderDetails.toString()}';
   static String getSplashRoute(NotificationBodyModel? body) {
@@ -71,7 +65,13 @@ class RouteHelper {
     return '$splash?data=$data';
   }
   static String getSignInRoute() => signIn;
-  static String getVerificationRoute(String number) => '$verification?number=$number';
+  static String getVerificationRoute(String number, {String? session}) {
+    String? authSession;
+    if(session != null) {
+      authSession = base64Url.encode(utf8.encode(session));
+    }
+    return '$verification?number=$number&session=$authSession';
+  }
   static String getMainRoute(String page) => '$main?page=$page';
   static String getForgotPassRoute() => forgotPassword;
   static String getResetPasswordRoute(String? phone, String token, String page) => '$resetPassword?phone=$phone&token=$token&page=$page';
@@ -81,7 +81,6 @@ class RouteHelper {
   static String getRunningOrderRoute() => runningOrder;
   static String getTermsRoute() => terms;
   static String getPrivacyRoute() => privacy;
-  static String getAgreementRoute() => agreement;
   static String getLanguageRoute() => language;
   static String getUpdateRoute(bool isUpdate) => '$update?update=${isUpdate.toString()}';
   static String getChatRoute({required NotificationBodyModel? notificationBody, User? user, int? conversationId, bool? fromNotification}) {
@@ -109,12 +108,6 @@ class RouteHelper {
   static String getTransactionHistoryRoute() => transactionHistory;
   static String getCashInHandRoute() => cashInHand;
   static String getWalletProvidedEarningRoute() => walletProvidedEarning;
-  static String getOffLineHistoryRoute({bool? fromNotification}) => '$offlineHistory?from=${fromNotification.toString()}';
-  static String getOfflinePaymentScreen({
-    required double total,
-  }) {
-    return '$offlinePaymentScreen?&total=$total';
-  }
 
 
   static List<GetPage> routes = [
@@ -128,7 +121,13 @@ class RouteHelper {
       return SplashScreen(body: data);
     }),
     GetPage(name: signIn, page: () => SignInScreen()),
-    GetPage(name: verification, page: () => VerificationScreen(number: Get.parameters['number'])),
+    GetPage(name: verification, page: () {
+      String? session;
+      if(Get.parameters['session'] != null && Get.parameters['session'] != 'null') {
+        session = utf8.decode(base64Url.decode(Get.parameters['session'] ?? ''));
+      }
+      return VerificationScreen(number: Get.parameters['number'], firebaseSession: session);
+    }),
     GetPage(name: main, page: () => DashboardScreen(
       pageIndex: Get.parameters['page'] == 'home' ? 0 : Get.parameters['page'] == 'order-request' ? 1
           : Get.parameters['page'] == 'order' ? 2 : Get.parameters['page'] == 'profile' ? 3 : 0,
@@ -147,9 +146,8 @@ class RouteHelper {
     GetPage(name: updateProfile, page: () => const UpdateProfileScreen()),
     GetPage(name: notification, page: () => NotificationScreen(fromNotification: Get.parameters['from'] == 'true')),
     GetPage(name: runningOrder, page: () => const RunningOrderScreen()),
-    GetPage(name: terms, page: () => const HtmlViewerScreen(isPrivacyPolicy: false, isAgreement: false)),
-    GetPage(name: privacy, page: () => const HtmlViewerScreen(isPrivacyPolicy: true, isAgreement: false)),
-    GetPage(name: agreement, page: () => const HtmlViewerScreen(isAgreement: true, isPrivacyPolicy: false)),
+    GetPage(name: terms, page: () => const HtmlViewerScreen(isPrivacyPolicy: false)),
+    GetPage(name: privacy, page: () => const HtmlViewerScreen(isPrivacyPolicy: true)),
     GetPage(name: language, page: () => const ChooseLanguageScreen()),
     GetPage(name: update, page: () => UpdateScreen(isUpdate: Get.parameters['update'] == 'true')),
     GetPage(name: chatScreen, page: () {
@@ -180,10 +178,5 @@ class RouteHelper {
     GetPage(name: transactionHistory, page: () => const TransactionHistoryScreen()),
     GetPage(name: cashInHand, page: () => const CashInHandScreen()),
     GetPage(name: walletProvidedEarning, page: () => const WalletProvidedHistoryScreen()),
-    GetPage(name: offlineHistory, page: () => OfflineHistoryScreen(fromNotification: Get.parameters['from'] == 'true')),
-    GetPage(name: offlinePaymentScreen, page: () {
-      return OfflinePaymentScreen(
-        total: double.parse(Get.parameters['total']!),);
-    }, ),
   ];
 }

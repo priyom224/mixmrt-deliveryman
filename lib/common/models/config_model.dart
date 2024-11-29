@@ -44,7 +44,7 @@ class ConfigModel {
   String? disbursementType;
   List<PaymentBody>? activePaymentMethodList;
   double? minAmountToPayDm;
-  bool? deliveryAgreement;
+  bool? firebaseOtpVerification;
 
   ConfigModel({
     this.businessName,
@@ -92,7 +92,7 @@ class ConfigModel {
     this.disbursementType,
     this.activePaymentMethodList,
     this.minAmountToPayDm,
-    this.deliveryAgreement,
+    this.firebaseOtpVerification,
   });
 
   ConfigModel.fromJson(Map<String, dynamic> json) {
@@ -152,7 +152,7 @@ class ConfigModel {
       });
     }
     minAmountToPayDm = json['min_amount_to_pay_dm']?.toDouble();
-    deliveryAgreement = json['dm_agreement'];
+    firebaseOtpVerification = json['firebase_otp_verification'] == 1;
   }
 
   Map<String, dynamic> toJson() {
@@ -210,7 +210,7 @@ class ConfigModel {
       data['active_payment_method_list'] = activePaymentMethodList!.map((v) => v.toJson()).toList();
     }
     data['min_amount_to_pay_dm'] = minAmountToPayDm;
-    data['dm_agreement'] = deliveryAgreement;
+    data['firebase_otp_verification'] = firebaseOtpVerification;
     return data;
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart_delivery/features/order/controllers/order_controller.dart';
 import 'package:sixam_mart_delivery/features/disbursement/helper/disbursement_helper.dart';
@@ -35,6 +36,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   final _channel = const MethodChannel('com.sixamtech/app_retain');
   late StreamSubscription _stream;
   DisbursementHelper disbursementHelper = DisbursementHelper();
+  bool _canExit = false;
 
   @override
   void initState() {
@@ -109,15 +111,32 @@ class DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (didPop, result) async{
         if(_pageIndex != 0) {
           _setPage(0);
         }else {
-          if (GetPlatform.isAndroid && Get.find<ProfileController>().profileModel!.active == 1) {
-            _channel.invokeMethod('sendToBackground');
-          } else {
-            return;
+          if(_canExit) {
+            if (GetPlatform.isAndroid) {
+              if (Get.find<ProfileController>().profileModel!.active == 1) {
+                _channel.invokeMethod('sendToBackground');
+              }
+              SystemNavigator.pop();
+            } else if (GetPlatform.isIOS) {
+              exit(0);
+            }
           }
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('back_press_again_to_exit'.tr, style: const TextStyle(color: Colors.white)),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+            margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+          ));
+          _canExit = true;
+
+          Timer(const Duration(seconds: 2), () {
+            _canExit = false;
+          });
         }
       },
       child: Scaffold(

@@ -4,7 +4,7 @@ import 'package:sixam_mart_delivery/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProfileButtonWidget extends StatefulWidget {
+class ProfileButtonWidget extends StatelessWidget {
   final IconData icon;
   final String title;
   final bool? isButtonActive;
@@ -12,37 +12,13 @@ class ProfileButtonWidget extends StatefulWidget {
   const ProfileButtonWidget({super.key, required this.icon, required this.title, required this.onTap, this.isButtonActive});
 
   @override
-  State<ProfileButtonWidget> createState() => _ProfileButtonWidgetState();
-}
-
-
-
-class _ProfileButtonWidgetState extends State<ProfileButtonWidget> {
-
-  bool? _buttonActive;
-
-  @override
-  initState() {
-    super.initState();
-
-    _buttonActive = widget.isButtonActive;
-  }
-
-  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        if(_buttonActive != null) {
-          setState(() {
-            _buttonActive = !_buttonActive!;
-          });
-        }
-        widget.onTap();
-      },
+      onTap: onTap as void Function()?,
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: Dimensions.paddingSizeSmall,
-          vertical: _buttonActive != null ? Dimensions.paddingSizeExtraSmall : Dimensions.paddingSizeDefault,
+          vertical: isButtonActive != null ? Dimensions.paddingSizeExtraSmall : Dimensions.paddingSizeDefault,
         ),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
@@ -51,22 +27,16 @@ class _ProfileButtonWidgetState extends State<ProfileButtonWidget> {
         ),
         child: Row(children: [
 
-          Icon(widget.icon, size: 25),
+          Icon(icon, size: 25),
           const SizedBox(width: Dimensions.paddingSizeSmall),
 
-          Expanded(child: Text(widget.title, style: robotoRegular)),
-          _buttonActive != null ? Transform.scale(
+          Expanded(child: Text(title, style: robotoRegular)),
+
+          isButtonActive != null ? Transform.scale(
             scale: 0.7,
             child: CupertinoSwitch(
-              value: _buttonActive!,
-              onChanged: (bool isActive) {
-                if(_buttonActive != null) {
-                  setState(() {
-                    _buttonActive = !_buttonActive!;
-                  });
-                }
-                widget.onTap();
-              },
+              value: isButtonActive!,
+              onChanged: (bool? value) => onTap(),
               activeColor: Theme.of(context).primaryColor,
               trackColor: Theme.of(context).primaryColor.withOpacity(0.5),
             ),

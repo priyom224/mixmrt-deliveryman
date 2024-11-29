@@ -103,7 +103,11 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
     }else {
       Get.find<ForgotPasswordController>().forgetPassword(numberWithCountryCode).then((status) async {
         if (status.isSuccess) {
-          Get.toNamed(RouteHelper.getVerificationRoute(numberWithCountryCode));
+          if(Get.find<SplashController>().configModel!.firebaseOtpVerification!) {
+            Get.find<ForgotPasswordController>().firebaseVerifyPhoneNumber(numberWithCountryCode);
+          } else {
+            Get.toNamed(RouteHelper.getVerificationRoute(numberWithCountryCode));
+          }
         }else {
           showCustomSnackBar(status.message);
         }

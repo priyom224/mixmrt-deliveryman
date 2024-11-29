@@ -13,7 +13,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerificationScreen extends StatefulWidget {
   final String? number;
-  const VerificationScreen({super.key, required this.number});
+  final String? firebaseSession;
+  const VerificationScreen({super.key, required this.number, this.firebaseSession});
 
   @override
   VerificationScreenState createState() => VerificationScreenState();
@@ -71,16 +72,16 @@ class VerificationScreenState extends State<VerificationScreen> {
             ])),
 
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 39, vertical: 35),
+              padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: 35),
               child: PinCodeTextField(
-                length: 4,
+                length: 6,
                 appContext: context,
                 keyboardType: TextInputType.number,
                 animationType: AnimationType.slide,
                 pinTheme: PinTheme(
                   shape: PinCodeFieldShape.box,
                   fieldHeight: 60,
-                  fieldWidth: 60,
+                  fieldWidth: 50,
                   borderWidth: 1,
                   borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                   selectedColor: Theme.of(context).primaryColor.withOpacity(0.2),
@@ -105,31 +106,51 @@ class VerificationScreenState extends State<VerificationScreen> {
                 style: robotoRegular.copyWith(color: Theme.of(context).disabledColor),
               ),
 
-              TextButton(
-                onPressed: _seconds < 1 ? () {
-                  forgotPasswordController.forgetPassword(widget.number).then((value) {
-                    if (value.isSuccess) {
-                      showCustomSnackBar('resend_code_successful'.tr, isError: false);
-                    } else {
-                      showCustomSnackBar(value.message);
-                    }
-                  });
+              !forgotPasswordController.isLoading ? TextButton(
+                onPressed: _seconds < 1 ? () async {
+                  ///Firebase OTP
+                  if(widget.firebaseSession != null) {
+                    await forgotPasswordController.firebaseVerifyPhoneNumber(_number!, canRoute: false);
+                    _startTimer();
+
+                  } else {
+                    forgotPasswordController.forgetPassword(widget.number).then((value) {
+                      if (value.isSuccess) {
+                        _startTimer();
+                        showCustomSnackBar('resend_code_successful'.tr, isError: false);
+                      } else {
+                        showCustomSnackBar(value.message);
+                      }
+                    });
+                  }
                 } : null,
                 child: Text('${'resend'.tr}${_seconds > 0 ? ' ($_seconds)' : ''}'),
+              ) : Container(
+                height: 20, width: 20,
+                padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge),
+                child: const CircularProgressIndicator(),
               ),
 
             ]),
 
-            forgotPasswordController.verificationCode.length == 4 ? !forgotPasswordController.isLoading ? CustomButtonWidget(
+            forgotPasswordController.verificationCode.length == 6 ? !forgotPasswordController.isLoading ? CustomButtonWidget(
               buttonText: 'verify'.tr,
               onPressed: () {
-                forgotPasswordController.verifyToken(_number).then((value) {
-                  if(value.isSuccess) {
-                    Get.toNamed(RouteHelper.getResetPasswordRoute(_number, forgotPasswordController.verificationCode, 'reset-password'));
-                  }else {
-                    showCustomSnackBar(value.message);
-                  }
-                });
+                if(widget.firebaseSession != null) {
+                  forgotPasswordController.verifyFirebaseOtp(phoneNumber: _number!, session: widget.firebaseSession!, otp: forgotPasswordController.verificationCode).then((value) {
+                    if(value.isSuccess) {
+                      Get.toNamed(RouteHelper.getResetPasswordRoute(_number, forgotPasswordController.verificationCode, 'reset-password'));
+                    }
+                  });
+                } else {
+                  forgotPasswordController.verifyToken(_number).then((value) {
+                    if(value.isSuccess) {
+                      Get.toNamed(RouteHelper.getResetPasswordRoute(_number, forgotPasswordController.verificationCode, 'reset-password'));
+                    }else {
+                      showCustomSnackBar(value.message);
+                    }
+                  });
+                }
               },
             ) : const Center(child: CircularProgressIndicator()) : const SizedBox.shrink(),
 

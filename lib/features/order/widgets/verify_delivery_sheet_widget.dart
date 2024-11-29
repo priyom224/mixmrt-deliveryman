@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:sixam_mart_delivery/features/notification/controllers/notification_controller.dart';
 import 'package:sixam_mart_delivery/features/order/controllers/order_controller.dart';
 import 'package:sixam_mart_delivery/features/order/domain/models/order_model.dart';
@@ -28,12 +29,35 @@ class VerifyDeliverySheetWidget extends StatefulWidget {
 }
 
 class _VerifyDeliverySheetWidgetState extends State<VerifyDeliverySheetWidget> {
+
+  Timer? _timer;
+  int _seconds = 0;
+
   @override
   void initState() {
     super.initState();
     if(widget.isSetOtp!) {
       Get.find<OrderController>().setOtp('');
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _timer?.cancel();
+  }
+
+  void _startTimer() {
+    _seconds = 60;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _seconds = _seconds - 1;
+      if(_seconds == 0) {
+        timer.cancel();
+        _timer?.cancel();
+      }
+      setState(() {});
+    });
   }
 
   @override
@@ -163,11 +187,11 @@ class _VerifyDeliverySheetWidgetState extends State<VerifyDeliverySheetWidget> {
               ),
 
               Get.find<NotificationController>().hideNotificationButton ? const SizedBox() : InkWell(
-                onTap: () => Get.find<NotificationController>().sendDeliveredNotification(widget.currentOrderModel.id),
-                child: Text(
-                  'resend_it'.tr,
-                  style: robotoMedium.copyWith(color: Theme.of(context).hintColor, fontSize: Dimensions.fontSizeSmall),
-                ),
+                onTap: _seconds < 1 ? () {
+                  Get.find<NotificationController>().sendDeliveredNotification(widget.currentOrderModel.id);
+                  _startTimer();
+                } : null,
+                child: Text('${'resend_it'.tr}${_seconds > 0 ? ' (${_seconds}s)' : ''}', style: TextStyle(color: Theme.of(context).primaryColor),),
               )
             ]) : const SizedBox(),
             const SizedBox(height: Dimensions.paddingSizeLarge),
