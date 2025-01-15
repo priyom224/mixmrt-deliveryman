@@ -1,6 +1,5 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
-import 'package:sixam_mart_delivery/features/language/controllers/language_controller.dart';
 import 'package:sixam_mart_delivery/features/profile/controllers/profile_controller.dart';
 import 'package:sixam_mart_delivery/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart_delivery/helper/custom_validator_helper.dart';
@@ -68,8 +67,7 @@ class SignInScreen extends StatelessWidget {
                         onCountryChanged: (CountryCode countryCode) {
                           countryDialCode = countryCode.dialCode;
                         },
-                        countryDialCode: countryDialCode != null ? CountryCode.fromCountryCode(Get.find<SplashController>().configModel!.country!).code
-                            : Get.find<LocalizationController>().locale.countryCode,
+                        countryDialCode: countryDialCode ?? CountryCode.fromCountryCode(Get.find<SplashController>().configModel!.country!).code,
                       ),
 
                       CustomTextFieldWidget(

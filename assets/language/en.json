@@ -408,5 +408,16 @@
   "are_you_sure_you_want_to_accept_this_order" : "Are you sure you want to accept this order?",
   "are_you_sure_you_want_to_accept_this_delivery" : "Are you sure you want to accept this delivery?",
   "are_you_sure_you_want_to_confirm_this_delivery" : "Are you sure you want to confirm this delivery?",
-  "are_you_sure_you_want_to_confirm_this_order" : "Are you sure you want to confirm this order?"
+  "are_you_sure_you_want_to_confirm_this_order" : "Are you sure you want to confirm this order?",
+
+  "choose_your_language": "Choose Your Language",
+  "choose_your_language_to_proceed": "Choose your language to proceed",
+  "language_updated_successfully": "Language updated successfully",
+  "are_you_sure": "Are you sure?",
+  "you_want_to_enable_notification": "You want to enable notification?",
+  "you_want_to_disable_notification": "You want to disable notification?",
+  "please_enter_your_new_password_and_confirm_password": "Please enter your new password and confirm password",
+  "number_verification_is_successful": "Number verification is successful",
+  "please_set_your_new_password": "Please set your new password",
+  "back_press_again_to_exit": "Back press again to exit"
 }

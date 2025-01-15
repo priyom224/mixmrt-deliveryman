@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart_delivery/features/language/controllers/language_controller.dart';
 import 'package:sixam_mart_delivery/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart_delivery/common/controllers/theme_controller.dart';
@@ -65,8 +67,31 @@ class MyApp extends StatelessWidget {
   final NotificationBodyModel? body;
   const MyApp({super.key, required this.languages, this.body});
 
+  void _route() {
+    Get.find<SplashController>().getConfigData().then((bool isSuccess) async {
+      if (isSuccess) {
+        if (Get.find<AuthController>().isLoggedIn()) {
+          Get.find<AuthController>().updateToken();
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if(GetPlatform.isWeb) {
+      Get.find<SplashController>().initSharedData();
+      _route();
+    }
+
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.black,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ));
+
     return GetBuilder<ThemeController>(builder: (themeController) {
       return GetBuilder<LocalizationController>(builder: (localizeController) {
         return GetBuilder<SplashController>(builder: (splashController) {

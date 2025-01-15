@@ -3,9 +3,9 @@ import 'package:sixam_mart_delivery/util/images.dart';
 
 class AppConstants {
   static const String appName = 'MIXMRT Delivery';
-  static const double appVersion = 2.8; // web version: 2.8
+  static const double appVersion = 2.12; ///Flutter sdk 3.24.5
 
-  static String baseUrl = 'https://mixmrt.com/zm';
+  static String baseUrl = 'https://dev.mixmrt.com';
 
   static void setBaseUrl(String url) {
     baseUrl = url;
@@ -29,9 +29,9 @@ class AppConstants {
   static const String activeStatusUri = '/api/v1/delivery-man/update-active-status';
   static const String updateProfileUri = '/api/v1/delivery-man/update-profile';
   static const String notificationUri = '/api/v1/delivery-man/notifications?token=';
-  static const String aboutUsUri = '/about-us';
-  static const String privacyPolicyUri = '/privacy-policy';
-  static const String tramsAndConditionUri = '/terms-and-conditions';
+  static const String aboutUsUri = '/api/v1/about-us';
+  static const String privacyPolicyUri = '/api/v1/privacy-policy';
+  static const String tramsAndConditionUri = '/api/v1/terms-and-conditions';
   static const String driverRemoveUri = '/api/v1/delivery-man/remove-account?token=';
   static const String dmRegisterUri = '/api/v1/auth/delivery-man/store';
   static const String zoneListUri = '/api/v1/zone/list';
@@ -55,7 +55,7 @@ class AppConstants {
   static const String offlineMethodListUri = '/api/v1/offline_payment_method_list';
   static const String offlineMethodDeliveryListUri = '/api/v1/delivery-man/offline-payment-list';
   static const String getAgreementUri = '/api/v1/show-agreement/dm';
-
+  static const String firebaseAuthVerify = '/api/v1/auth/delivery-man/firebase-verify-token';
 
 
   //chat url
@@ -69,6 +69,8 @@ class AppConstants {
   static const String token = 'sixam_mart_delivery_token';
   static const String countryCode = 'sixam_mart_delivery_country_code';
   static const String languageCode = 'sixam_mart_delivery_language_code';
+  static const String cacheCountryCode = 'cache_country_code';
+  static const String cacheLanguageCode = 'cache_language_code';
   static const String userPassword = 'sixam_mart_delivery_user_password';
   static const String userAddress = 'sixam_mart_delivery_user_address';
   static const String userNumber = 'sixam_mart_delivery_user_number';

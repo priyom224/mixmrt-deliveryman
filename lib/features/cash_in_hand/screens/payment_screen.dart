@@ -35,21 +35,23 @@ class PaymentScreenState extends State<PaymentScreen> {
   void _initData() async {
 
     browser = MyInAppBrowser(redirectUrl: widget.redirectUrl);
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    if(!GetPlatform.isIOS){
+      await InAppWebViewController.setWebContentsDebuggingEnabled(true);
 
-    bool swAvailable = await WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_BASIC_USAGE);
-    bool swInterceptAvailable = await WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_SHOULD_INTERCEPT_REQUEST);
+      bool swAvailable = await WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_BASIC_USAGE);
+      bool swInterceptAvailable = await WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_SHOULD_INTERCEPT_REQUEST);
 
-    if (swAvailable && swInterceptAvailable) {
-      ServiceWorkerController serviceWorkerController = ServiceWorkerController.instance();
-      await serviceWorkerController.setServiceWorkerClient(ServiceWorkerClient(
-        shouldInterceptRequest: (request) async {
-          if (kDebugMode) {
-            print(request);
-          }
-          return null;
-        },
-      ));
+      if (swAvailable && swInterceptAvailable) {
+        ServiceWorkerController serviceWorkerController = ServiceWorkerController.instance();
+        await serviceWorkerController.setServiceWorkerClient(ServiceWorkerClient(
+          shouldInterceptRequest: (request) async {
+            if (kDebugMode) {
+              print(request);
+            }
+            return null;
+          },
+        ));
+      }
     }
 
     debugPrint('------$browser');
@@ -66,7 +68,7 @@ class PaymentScreenState extends State<PaymentScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (didPop, result) async{
         _exitApp().then((value) => value!);
       },
       child: Scaffold(

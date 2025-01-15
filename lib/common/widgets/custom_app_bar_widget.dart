@@ -15,7 +15,7 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSizeWidget 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyLarge!.color)),
+      title: Text(title, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyLarge!.color)),
       centerTitle: true,
       leading: isBackButtonExist ? IconButton(
         icon: const Icon(Icons.arrow_back_ios),
@@ -31,8 +31,9 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSizeWidget 
         } ,
       ) : const SizedBox(),
       backgroundColor: Theme.of(context).cardColor,
-      elevation: 0,
-
+      surfaceTintColor: Theme.of(context).cardColor,
+      shadowColor: Theme.of(context).disabledColor.withOpacity(0.5),
+      elevation: 2,
       actions: menuWidget != null ? [menuWidget!] : [
         Padding(
           padding: const EdgeInsets.only(right: Dimensions.paddingSizeDefault),

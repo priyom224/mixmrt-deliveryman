@@ -71,7 +71,13 @@ class RouteHelper {
     return '$splash?data=$data';
   }
   static String getSignInRoute() => signIn;
-  static String getVerificationRoute(String number) => '$verification?number=$number';
+  static String getVerificationRoute(String number, {String? session}) {
+    String? authSession;
+    if(session != null) {
+      authSession = base64Url.encode(utf8.encode(session));
+    }
+    return '$verification?number=$number&session=$authSession';
+  }
   static String getMainRoute(String page) => '$main?page=$page';
   static String getForgotPassRoute() => forgotPassword;
   static String getResetPasswordRoute(String? phone, String token, String page) => '$resetPassword?phone=$phone&token=$token&page=$page';
@@ -128,7 +134,13 @@ class RouteHelper {
       return SplashScreen(body: data);
     }),
     GetPage(name: signIn, page: () => SignInScreen()),
-    GetPage(name: verification, page: () => VerificationScreen(number: Get.parameters['number'])),
+    GetPage(name: verification, page: () {
+      String? session;
+      if(Get.parameters['session'] != null && Get.parameters['session'] != 'null') {
+        session = utf8.decode(base64Url.decode(Get.parameters['session'] ?? ''));
+      }
+      return VerificationScreen(number: Get.parameters['number'], firebaseSession: session);
+    }),
     GetPage(name: main, page: () => DashboardScreen(
       pageIndex: Get.parameters['page'] == 'home' ? 0 : Get.parameters['page'] == 'order-request' ? 1
           : Get.parameters['page'] == 'order' ? 2 : Get.parameters['page'] == 'profile' ? 3 : 0,

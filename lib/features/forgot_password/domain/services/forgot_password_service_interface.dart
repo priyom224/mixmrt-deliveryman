@@ -6,4 +6,5 @@ abstract class ForgotPasswordServiceInterface {
   Future<ResponseModel> forgetPassword(String? phone);
   Future<ResponseModel> verifyToken(String? phone, String token);
   Future<ResponseModel> resetPassword(String? resetToken, String phone, String password, String confirmPassword);
+  Future<ResponseModel> verifyFirebaseOtp({required String phoneNumber, required String session, required String otp});
 }

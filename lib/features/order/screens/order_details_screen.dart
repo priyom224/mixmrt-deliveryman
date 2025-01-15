@@ -27,7 +27,6 @@ import 'package:sixam_mart_delivery/common/widgets/custom_snackbar_widget.dart';
 import 'package:sixam_mart_delivery/features/order/widgets/camera_button_sheet_widget.dart';
 import 'package:sixam_mart_delivery/features/order/widgets/cancellation_dialogue_widget.dart';
 import 'package:sixam_mart_delivery/features/order/widgets/collect_money_delivery_sheet_widget.dart';
-import 'package:sixam_mart_delivery/features/order/widgets/order_item_widget.dart';
 import 'package:sixam_mart_delivery/features/order/widgets/verify_delivery_sheet_widget.dart';
 import 'package:sixam_mart_delivery/features/order/widgets/info_card_widget.dart';
 import 'package:sixam_mart_delivery/features/order/widgets/slider_button_widget.dart';
@@ -99,7 +98,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
 
     return PopScope(
       canPop: true,
-      onPopInvoked: (didPop) async{
+      onPopInvokedWithResult: (didPop, result) async{
         if((widget.fromNotification || widget.fromLocationScreen)) {
           Future.delayed(const Duration(milliseconds: 0), () async {
             await Get.offAllNamed(RouteHelper.getInitialRoute());
@@ -299,7 +298,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                       longitude: parcel ? controllerOrderModel.deliveryAddress!.longitude : controllerOrderModel.storeLng,
                       showButton: (controllerOrderModel.orderStatus != 'delivered' && controllerOrderModel.orderStatus != 'failed'
                           && controllerOrderModel.orderStatus != 'canceled' && controllerOrderModel.orderStatus != 'refunded'),
-                      isStore: true, isChatAllow: showChatPermission,
+                      isStore: parcel ? false : true, isChatAllow: showChatPermission,
                       messageOnTap: () => Get.toNamed(RouteHelper.getChatRoute(
                         notificationBody: NotificationBodyModel(
                           orderId: controllerOrderModel.id, vendorId: orderController.orderDetailsModel![0].vendorId,

@@ -23,6 +23,11 @@ class ForgotPasswordService implements ForgotPasswordServiceInterface {
   }
 
   @override
+  Future<ResponseModel> verifyFirebaseOtp({required String phoneNumber, required String session, required String otp}) async {
+    return await forgotPasswordRepositoryInterface.verifyFirebaseOtp(phoneNumber: phoneNumber, session: session, otp: otp);
+  }
+
+  @override
   Future<ResponseModel> resetPassword(String? resetToken, String phone, String password, String confirmPassword) async {
     return await forgotPasswordRepositoryInterface.resetPassword(resetToken, phone, password, confirmPassword);
   }

@@ -1,5 +1,5 @@
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:sixam_mart_delivery/features/html/controllers/html_controller.dart';
 import 'package:sixam_mart_delivery/util/dimensions.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_app_bar_widget.dart';
@@ -38,14 +38,11 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
           child: htmlController.htmlText != null ? SingleChildScrollView(
             padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
             physics: const BouncingScrollPhysics(),
-            child: Html(
-              data: htmlController.htmlText ?? '',
+            child: HtmlWidget(
+              htmlController.htmlText ?? '',
               key: Key(widget.isPrivacyPolicy ? 'privacy_policy' : widget.isAgreement ? 'contact' : 'terms_condition'),
-              onLinkTap: (url, attributes, element){
-                if(url!.startsWith('www.')) {
-                  url = 'https://$url';
-                }
-                launchUrlString(url, mode: LaunchMode.externalApplication);
+              onTapUrl: (String url) {
+                return launchUrlString(url, mode: LaunchMode.externalApplication);
               },
             ),
           ) : const Center(child: CircularProgressIndicator()),

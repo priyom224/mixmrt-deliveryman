@@ -1,16 +1,11 @@
-import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sixam_mart_delivery/api/api_client.dart';
-import 'package:sixam_mart_delivery/common/models/response_model.dart';
-import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart_delivery/features/auth/domain/models/delivery_man_body_model.dart';
 import 'package:sixam_mart_delivery/features/auth/domain/models/vehicle_model.dart';
 import 'package:sixam_mart_delivery/features/auth/domain/repositories/auth_repository_interface.dart';
-import 'package:sixam_mart_delivery/features/order/domain/models/offline_method_model.dart';
 import 'package:sixam_mart_delivery/util/app_constants.dart';
 
 class AuthRepository implements AuthRepositoryInterface {
@@ -97,7 +92,7 @@ class AuthRepository implements AuthRepositoryInterface {
       await FirebaseMessaging.instance.unsubscribeFromTopic(AppConstants.topic);
       FirebaseMessaging.instance.unsubscribeFromTopic(sharedPreferences.getString(AppConstants.zoneTopic)!);
       FirebaseMessaging.instance.unsubscribeFromTopic(sharedPreferences.getString(AppConstants.parcelTopic)!);
-      apiClient.postData(AppConstants.tokenUri, {"_method": "put", "token": getUserToken(), "fcm_token": '@'}, handleError: false);
+      apiClient.postData(AppConstants.tokenUri, {"_method": "put", "token": getUserToken()}, handleError: false);
     }
     await sharedPreferences.remove(AppConstants.token);
     await sharedPreferences.setStringList(AppConstants.ignoreList, []);
