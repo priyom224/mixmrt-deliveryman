@@ -56,8 +56,8 @@ class DateConverterHelper {
   }
 
   static int timeDistanceInMin(String time) {
-    DateTime currentTime = Get.find<SplashController>().currentTime;
-    DateTime rangeTime = dateTimeStringToDate(time);
+    DateTime currentTime = Get.find<SplashController>().currentTime.toLocal();
+    DateTime rangeTime = dateTimeStringToDate(time).toLocal();
     return currentTime.difference(rangeTime).inMinutes;
   }
 

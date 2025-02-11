@@ -419,5 +419,14 @@
   "please_enter_your_new_password_and_confirm_password": "Please enter your new password and confirm password",
   "number_verification_is_successful": "Number verification is successful",
   "please_set_your_new_password": "Please set your new password",
-  "back_press_again_to_exit": "Back press again to exit"
+  "back_press_again_to_exit": "Back press again to exit",
+
+  "write_your_address" : "Write your address",
+  "upload_address_proof_image" : "Upload Address Proof Image",
+  "enter_delivery_man_address" : "Enter delivery man address",
+  "please_upload_address_proof_image" : "Please upload address proof image",
+  "transfer_collect_cash_to_store" : "Transfer Collect Cash to Store",
+  "transfer" : "Transfer",
+  "collect_cash_transferred_to_store" : "Collect cash transferred to store",
+  "otp_verification_code" : "OTP Verification Code"
 }

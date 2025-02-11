@@ -87,11 +87,14 @@ class AuthService implements AuthServiceInterface {
   }
 
   @override
-  List<MultipartBody> prepareMultiPartsBody(XFile? pickedImage, List<XFile> pickedIdentities) {
+  List<MultipartBody> prepareMultiPartsBody(XFile? pickedImage, List<XFile> pickedIdentities, List<XFile> pickedProofAddress) {
     List<MultipartBody> multiParts = [];
     multiParts.add(MultipartBody('image', pickedImage));
     for(XFile file in pickedIdentities) {
       multiParts.add(MultipartBody('identity_image[]', file));
+    }
+    for(XFile file in pickedProofAddress) {
+      multiParts.add(MultipartBody('dm_address_proof[]', file));
     }
     return multiParts;
   }

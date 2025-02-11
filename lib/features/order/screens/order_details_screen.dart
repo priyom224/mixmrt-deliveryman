@@ -285,6 +285,18 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                     ]) : const SizedBox(),
                     SizedBox(height: controllerOrderModel.deliveryInstruction != null ? Dimensions.paddingSizeSmall : 0),
 
+                    controllerOrderModel.dmOtp != null ? Column(
+                      children: [
+                        const Divider(height: Dimensions.paddingSizeLarge),
+
+                        Row(children: [
+                          Text('${'otp_verification_code'.tr}:', style: robotoRegular),
+                          const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                          Text(controllerOrderModel.dmOtp ?? '', style: robotoMedium),
+                        ],
+                      ),
+                    ]) : const SizedBox(),
+
                     const Divider(height: Dimensions.paddingSizeLarge),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
 

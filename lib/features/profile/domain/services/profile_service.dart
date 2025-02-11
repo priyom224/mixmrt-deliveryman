@@ -44,6 +44,11 @@ class ProfileService implements ProfileServiceInterface {
   }
 
   @override
+  Future<bool> transferCollectCashToStore({required String dmId}) async {
+    return await profileRepositoryInterface.transferCollectCashToStore(dmId: dmId);
+  }
+
+  @override
   Future<String> addressPlaceMark(Position locationResult) async {
     String address;
     try{

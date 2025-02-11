@@ -5,7 +5,7 @@ class AppConstants {
   static const String appName = 'MIXMRT Delivery';
   static const double appVersion = 2.12; ///Flutter sdk 3.24.5
 
-  static String baseUrl = 'https://dev.mixmrt.com';
+  static String baseUrl = 'https://dash.mixmrt.com/zm';
 
   static void setBaseUrl(String url) {
     baseUrl = url;
@@ -56,6 +56,9 @@ class AppConstants {
   static const String offlineMethodDeliveryListUri = '/api/v1/delivery-man/offline-payment-list';
   static const String getAgreementUri = '/api/v1/show-agreement/dm';
   static const String firebaseAuthVerify = '/api/v1/auth/delivery-man/firebase-verify-token';
+
+  //Phase 4 part 1
+  static const String transferCollectCashToStoreUri = '/api/v1/delivery-man/transfer-collected-cash-to-store';
 
 
   //chat url

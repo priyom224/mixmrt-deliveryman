@@ -39,12 +39,14 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _identityNumberController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   final FocusNode _fNameNode = FocusNode();
   final FocusNode _lNameNode = FocusNode();
   final FocusNode _emailNode = FocusNode();
   final FocusNode _phoneNode = FocusNode();
   final FocusNode _passwordNode = FocusNode();
   final FocusNode _identityNumberNode = FocusNode();
+  final FocusNode _addressNode = FocusNode();
   String? _countryDialCode;
 
   @override
@@ -55,7 +57,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
     if(Get.find<AuthController>().showPassView){
       Get.find<AuthController>().showHidePass(isUpdate: false);
     }
-    Get.find<AuthController>().pickDmImageForRegistration(false, true);
+    Get.find<AuthController>().pickDmImageForRegistration(isRemove: true);
     Get.find<AuthController>().dmStatusChange(0.4, isUpdate: false);
     Get.find<AuthController>().validPassCheck('', isUpdate: false);
     Get.find<AuthController>().setIdentityTypeIndex(Get.find<AuthController>().identityTypeList[0], false);
@@ -186,7 +188,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                           Positioned(
                             bottom: 0, right: 0, top: 0, left: 0,
                             child: InkWell(
-                              onTap: () => authController.pickDmImageForRegistration(true, false),
+                              onTap: () => authController.pickDmImageForRegistration(isLogo: true),
                               child: DottedBorder(
                                 color: Theme.of(context).primaryColor,
                                 strokeWidth: 1,
@@ -275,7 +277,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                           hintText: 'password'.tr,
                           controller: _passwordController,
                           focusNode: _passwordNode,
-                          nextFocus: _identityNumberNode,
+                          nextFocus: _addressNode,
                           inputAction: TextInputAction.done,
                           inputType: TextInputType.visiblePassword,
                           isPassword: true,
@@ -295,6 +297,86 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                         ),
 
                         authController.showPassView ? const PassViewWidget() : const SizedBox(),
+                        const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+
+                        CustomTextFieldWidget(
+                          hintText: 'write_your_address'.tr,
+                          controller: _addressController,
+                          focusNode: _addressNode,
+                          nextFocus: _identityNumberNode,
+                          inputType: TextInputType.text,
+                          prefixIcon: Icons.location_city,
+                        ),
+                        const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+
+                        ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: authController.pickedProofAddress.length + 1,
+                          itemBuilder: (context, index) {
+                            XFile? file = index == authController.pickedProofAddress.length ? null : authController.pickedProofAddress[index];
+                            if(index == authController.pickedProofAddress.length) {
+                              return InkWell(
+                                onTap: () {
+                                  if(authController.pickedProofAddress.length < 6){
+                                    authController.pickDmImageForRegistration();
+                                  }else{
+                                    showCustomSnackBar('maximum_image_limit_is_6'.tr);
+                                  }
+                                },
+                                child: DottedBorder(
+                                  color: Theme.of(context).primaryColor,
+                                  strokeWidth: 1,
+                                  strokeCap: StrokeCap.butt,
+                                  dashPattern: const [5, 5],
+                                  padding: const EdgeInsets.all(5),
+                                  borderType: BorderType.RRect,
+                                  radius: const Radius.circular(Dimensions.radiusDefault),
+                                  child: SizedBox(
+                                    height: 120, width: double.infinity,
+                                    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                      Icon(Icons.camera_alt, color: Theme.of(context).disabledColor, size: 38),
+                                      Text('upload_address_proof_image'.tr, style: robotoMedium.copyWith(color: Theme.of(context).disabledColor)),
+                                    ]),
+                                  ),
+                                ),
+                              );
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
+                              child: DottedBorder(
+                                color: Theme.of(context).primaryColor,
+                                strokeWidth: 1,
+                                strokeCap: StrokeCap.butt,
+                                dashPattern: const [5, 5],
+                                padding: const EdgeInsets.all(5),
+                                borderType: BorderType.RRect,
+                                radius: const Radius.circular(Dimensions.radiusDefault),
+                                child: Stack(children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                    child: GetPlatform.isWeb ? Image.network(
+                                      file!.path, width: double.infinity, height: 120, fit: BoxFit.cover,
+                                    ) : Image.file(
+                                      File(file!.path), width: double.infinity, height: 120, fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: 0, top: 0,
+                                    child: InkWell(
+                                      onTap: () => authController.removeProofAddressImage(index),
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(Dimensions.paddingSizeSmall),
+                                        child: Icon(Icons.delete_forever, color: Colors.red),
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                              ),
+                            );
+                          },
+                        ),
 
                       ]),
                     ),
@@ -465,7 +547,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                               return InkWell(
                                 onTap: () {
                                   if(authController.pickedIdentities.length < 6){
-                                    authController.pickDmImageForRegistration(false, false);
+                                    authController.pickDmImageForRegistration(pickedIdentities: true);
                                   }else{
                                     showCustomSnackBar('maximum_image_limit_is_6'.tr);
                                   }
@@ -590,6 +672,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                       String email = _emailController.text.trim();
                       String phone = _phoneController.text.trim();
                       String password = _passwordController.text.trim();
+                      String address = _addressController.text.trim();
                       String numberWithCountryCode = _countryDialCode!+phone;
                       bool isValid = GetPlatform.isAndroid ? false : true;
 
@@ -619,6 +702,10 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                         showCustomSnackBar('enter_password_for_delivery_man'.tr);
                       }else if(!authController.spatialCheck || !authController.lowercaseCheck || !authController.uppercaseCheck || !authController.numberCheck || !authController.lengthCheck) {
                         showCustomSnackBar('provide_valid_password'.tr);
+                      }else if(address.isEmpty){
+                        showCustomSnackBar('enter_delivery_man_address'.tr);
+                      }else if(authController.pickedProofAddress.isEmpty) {
+                        showCustomSnackBar('please_upload_address_proof_image'.tr);
                       }else {
                         authController.dmStatusChange(0.8);
                       }
@@ -643,6 +730,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
     String phone = _phoneController.text.trim();
     String password = _passwordController.text.trim();
     String identityNumber = _identityNumberController.text.trim();
+    String address = _addressController.text.trim();
 
     String numberWithCountryCode = _countryDialCode!+phone;
     PhoneValid phoneValid = await CustomValidatorHelper.isPhoneValid(numberWithCountryCode);
@@ -667,6 +755,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
         identityNumber: identityNumber, identityType: authController.identityTypeList[authController.identityTypeIndex],
         earning: authController.dmTypeIndex == 0 ? '1' : '0', zoneId: addressController.zoneList![addressController.selectedZoneIndex!].id.toString(),
         vehicleId: authController.vehicles![authController.vehicleIndex! - 1].id.toString(),
+        dmAddress: address,
       ));
     }
   }

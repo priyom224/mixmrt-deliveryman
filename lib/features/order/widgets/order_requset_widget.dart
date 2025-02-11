@@ -45,7 +45,10 @@ class OrderRequestWidget extends StatelessWidget {
 
           Padding(
             padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-            child: Column(children: [
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+
+              Text('${'order_id'.tr} - ${orderModel.id}', style: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall)),
+              const SizedBox(height: Dimensions.paddingSizeSmall),
 
               Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
 

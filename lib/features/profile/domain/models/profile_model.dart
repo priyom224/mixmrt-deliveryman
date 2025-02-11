@@ -33,6 +33,10 @@ class ProfileModel {
   double? withDrawableBalance;
   double? totalWithdrawn;
   bool? showPayNowButton;
+  int? withdrawReqStatus;
+  int? dmWithdrawToStoreStatus;
+  Store? store;
+
 
   ProfileModel({
     this.id,
@@ -69,6 +73,9 @@ class ProfileModel {
     this.withDrawableBalance,
     this.totalWithdrawn,
     this.showPayNowButton,
+    this.withdrawReqStatus,
+    this.dmWithdrawToStoreStatus,
+    this.store,
   });
 
   ProfileModel.fromJson(Map<String, dynamic> json) {
@@ -106,6 +113,9 @@ class ProfileModel {
     withDrawableBalance = json['withdraw_able_balance']?.toDouble();
     totalWithdrawn = json['total_withdrawn']?.toDouble();
     showPayNowButton = json['show_pay_now_button'];
+    withdrawReqStatus = json['withdraw_req_status'];
+    dmWithdrawToStoreStatus = json['dm_withdraw_to_store_status'];
+    store = json['store'] != null ? Store.fromJson(json['store']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -144,6 +154,26 @@ class ProfileModel {
     data['withdraw_able_balance'] = withDrawableBalance;
     data['total_withdrawn'] = totalWithdrawn;
     data['show_pay_now_button'] = showPayNowButton;
+    data['dm_withdraw_to_store_status'] = dmWithdrawToStoreStatus;
+    data['withdraw_req_status'] = withdrawReqStatus;
+    return data;
+  }
+
+}
+
+class Store{
+  int? selfDeliverySystem;
+
+  Store({this.selfDeliverySystem});
+
+  Store.fromJson(Map<String, dynamic> json) {
+    selfDeliverySystem = json['self_delivery_system'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['self_delivery_system'] = selfDeliverySystem;
     return data;
   }
 }
+

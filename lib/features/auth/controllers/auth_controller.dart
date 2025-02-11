@@ -31,6 +31,9 @@ class AuthController extends GetxController implements GetxService {
   
   List<XFile> _pickedIdentities = [];
   List<XFile> get pickedIdentities => _pickedIdentities;
+
+  List<XFile> _pickedProofAddress = [];
+  List<XFile> get pickedProofAddress => _pickedProofAddress;
   
   final List<String> _identityTypeList = AppConstants.baseUrl.contains('zm') ? ['nrc', 'driving_license', 'passport'] : ['nid', 'driving_license', 'passport'];
   List<String> get identityTypeList => _identityTypeList;
@@ -113,7 +116,7 @@ class AuthController extends GetxController implements GetxService {
   Future<void> registerDeliveryMan(DeliveryManBodyModel deliveryManBody) async {
     _isLoading = true;
     update();
-    List<MultipartBody> multiParts = authServiceInterface.prepareMultiPartsBody(_pickedImage, _pickedIdentities);
+    List<MultipartBody> multiParts = authServiceInterface.prepareMultiPartsBody(_pickedImage, _pickedIdentities, _pickedProofAddress);
     bool isSuccess = await authServiceInterface.registerDeliveryMan(deliveryManBody, multiParts);
     if (isSuccess) {
       Get.offAllNamed(RouteHelper.getSignInRoute());
@@ -235,17 +238,23 @@ class AuthController extends GetxController implements GetxService {
     }
   }
 
-  void pickDmImageForRegistration(bool isLogo, bool isRemove) async {
+  void pickDmImageForRegistration({bool isLogo = false, bool pickedIdentities = false, bool isRemove = false}) async {
     if(isRemove) {
       _pickedImage = null;
       _pickedIdentities = [];
+      _pickedProofAddress = [];
     }else {
       if (isLogo) {
         _pickedImage = await authServiceInterface.pickImageFromGallery();
-      } else {
+      } else if(pickedIdentities) {
         XFile? pickedIdentities = await authServiceInterface.pickImageFromGallery();
         if(pickedIdentities != null) {
           _pickedIdentities.add(pickedIdentities);
+        }
+      }else{
+        XFile? pickedProofAddress = await authServiceInterface.pickImageFromGallery();
+        if(pickedProofAddress != null) {
+          _pickedProofAddress.add(pickedProofAddress);
         }
       }
       update();
@@ -259,6 +268,11 @@ class AuthController extends GetxController implements GetxService {
 
   void removeIdentityImage(int index) {
     _pickedIdentities.removeAt(index);
+    update();
+  }
+
+  void removeProofAddressImage(int index) {
+    _pickedProofAddress.removeAt(index);
     update();
   }
 

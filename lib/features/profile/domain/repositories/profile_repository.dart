@@ -91,6 +91,12 @@ class ProfileRepository implements ProfileRepositoryInterface {
   }
 
   @override
+  Future<bool> transferCollectCashToStore({required String dmId}) async {
+    Response response = await apiClient.getData('${AppConstants.transferCollectCashToStoreUri}?delivery_man_id=$dmId');
+    return response.statusCode == 200;
+  }
+
+  @override
   Future add(value) {
     throw UnimplementedError();
   }

@@ -114,14 +114,14 @@ class SplashScreenState extends State<SplashScreen> {
   void _setBaseUrl(String countryCode) {
     switch (countryCode) {
       case 'MW':
-        AppConstants.setBaseUrl('https://dev.mixmrt.com');
+        AppConstants.setBaseUrl('https://dash.mixmrt.com/mw');
         break;
       case 'TZ':
-        AppConstants.setBaseUrl('https://dev.mixmrt.com');
+        AppConstants.setBaseUrl('https://dash.mixmrt.com/tz');
         break;
       case 'ZM':
       default:
-        AppConstants.setBaseUrl('https://dev.mixmrt.com');
+        AppConstants.setBaseUrl('https://dash.mixmrt.com/zm');
     }
 
     Get.find<ApiClient>().updateBaseUrl(AppConstants.baseUrl);

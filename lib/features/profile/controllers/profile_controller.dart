@@ -152,4 +152,18 @@ class ProfileController extends GetxController implements GetxService {
     }
   }
 
+  Future<void> transferCollectCashToStore({required String dmId}) async {
+    _isLoading = true;
+    update();
+
+    bool isSuccess = await profileServiceInterface.transferCollectCashToStore(dmId: dmId);
+    if (isSuccess) {
+      getProfile();
+      showCustomSnackBar('collect_cash_transferred_to_store'.tr, isError: false);
+    }
+
+    _isLoading = false;
+    update();
+  }
+
 }

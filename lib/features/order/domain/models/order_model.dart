@@ -85,6 +85,7 @@ class OrderModel {
   double? referrerBonusAmount;
   String? storeBusinessModel;
   int? storeChatPermission;
+  String? dmOtp;
 
   OrderModel({
     this.id,
@@ -138,6 +139,7 @@ class OrderModel {
     this.referrerBonusAmount,
     this.storeBusinessModel,
     this.storeChatPermission,
+    this.dmOtp,
   });
 
   OrderModel.fromJson(Map<String, dynamic> json) {
@@ -244,6 +246,7 @@ class OrderModel {
     referrerBonusAmount = json['ref_bonus_amount']?.toDouble();
     storeBusinessModel = json['store_business_model'];
     storeChatPermission = json['chat_permission'];
+    dmOtp = json['dm_otp'];
   }
 
   Map<String, dynamic> toJson() {
@@ -308,6 +311,7 @@ class OrderModel {
     data['ref_bonus_amount'] = referrerBonusAmount;
     data['store_business_model'] = storeBusinessModel;
     data['chat_permission'] = storeChatPermission;
+    data['dm_otp'] = dmOtp;
     return data;
   }
 }
