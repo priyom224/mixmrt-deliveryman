@@ -66,7 +66,7 @@ class _WithdrawMethodScreenState extends State<WithdrawMethodScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Theme.of(context).cardColor,
-                boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.1), spreadRadius: 1, blurRadius: 5, offset: const Offset(2, 3))],
+                boxShadow: [BoxShadow(color: Colors.black12.withValues(alpha: 0.1), spreadRadius: 1, blurRadius: 5, offset: const Offset(2, 3))],
               ),
               child: Column(children: [
 
@@ -84,7 +84,7 @@ class _WithdrawMethodScreenState extends State<WithdrawMethodScreen> {
 
                     method.isDefault == true ?  Container(
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                       ),
                       padding: const EdgeInsets.all(Dimensions.fontSizeSmall),

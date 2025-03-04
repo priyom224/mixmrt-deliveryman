@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_app_bar_widget.dart';
-import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart_delivery/features/cash_in_hand/controllers/cash_in_hand_controller.dart';
 import 'package:sixam_mart_delivery/features/cash_in_hand/widgets/offline_list_widget.dart';
 import 'package:sixam_mart_delivery/helper/route_helper.dart';
@@ -58,7 +56,7 @@ class _OfflineHistoryScreenState extends State<OfflineHistoryScreen> {
             margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Theme.of(context).disabledColor.withOpacity(0.5),
+              color: Theme.of(context).disabledColor.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
             ),
             child: const Icon(Icons.arrow_drop_down, size: 30),
@@ -69,15 +67,15 @@ class _OfflineHistoryScreenState extends State<OfflineHistoryScreen> {
           },
         )),
 
-        body: GetBuilder<CashInHandController>(builder: (CashInHandController) {
-          return CashInHandController.offlineHistoryList!.isNotEmpty ? ListView.builder(
+        body: GetBuilder<CashInHandController>(builder: (cashInHandController) {
+          return cashInHandController.offlineHistoryList!.isNotEmpty ? ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: CashInHandController.offlineHistoryList!.length,
+            itemCount: cashInHandController.offlineHistoryList!.length,
             padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
             itemBuilder: (context, index) {
               return OfflineListWidget(
-                offlineListModel: CashInHandController.offlineHistoryList![index],
-                showDivider: index != CashInHandController.offlineHistoryList!.length - 1,
+                offlineListModel: cashInHandController.offlineHistoryList![index],
+                showDivider: index != cashInHandController.offlineHistoryList!.length - 1,
               );
             },
           ) : Center(child: Text('no_history_found'.tr));

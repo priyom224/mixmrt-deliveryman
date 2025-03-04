@@ -4,7 +4,6 @@ import 'package:sixam_mart_delivery/features/language/controllers/language_contr
 import 'package:sixam_mart_delivery/features/language/widgets/language_bottom_sheet_widget.dart';
 import 'package:sixam_mart_delivery/features/profile/controllers/profile_controller.dart';
 import 'package:sixam_mart_delivery/features/profile/widgets/notification_status_change_bottom_sheet.dart';
-import 'package:sixam_mart_delivery/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart_delivery/common/controllers/theme_controller.dart';
 import 'package:sixam_mart_delivery/helper/route_helper.dart';
 import 'package:sixam_mart_delivery/util/app_constants.dart';

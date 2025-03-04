@@ -38,7 +38,7 @@ class OrderRequestWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10)],
       ),
       child: GetBuilder<OrderController>(builder: (orderController) {
         return Column(children: [
@@ -56,7 +56,7 @@ class OrderRequestWidget extends StatelessWidget {
                   height: 45, width: 45, alignment: Alignment.center,
                   decoration: parcel ? BoxDecoration(
                     borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                    color: Theme.of(context).primaryColor.withOpacity(0.2),
+                    color: Theme.of(context).primaryColor.withValues(alpha: 0.2),
                   ) : null,
                   child: ClipRRect(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), child: CustomImageWidget(
                     image: parcel ? '${orderModel.parcelCategory != null ? orderModel.parcelCategory!.imageFullUrl : ''}' : orderModel.storeLogoFullUrl ?? '',
@@ -98,7 +98,7 @@ class OrderRequestWidget extends StatelessWidget {
                   orderModel.deliveryAddress != null ? Container(
                     width: 110,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor.withOpacity(0.15),
+                      color: Theme.of(context).primaryColor.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeSmall),
@@ -173,7 +173,7 @@ class OrderRequestWidget extends StatelessWidget {
           Container(
             height: 80,
             decoration: BoxDecoration(
-              color: Theme.of(context).disabledColor.withOpacity(0.05),
+              color: Theme.of(context).disabledColor.withValues(alpha: 0.05),
               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(Dimensions.radiusDefault)),
             ),
             padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
@@ -192,7 +192,7 @@ class OrderRequestWidget extends StatelessWidget {
 
                   Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor.withOpacity(0.15),
+                      color: Theme.of(context).primaryColor.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),

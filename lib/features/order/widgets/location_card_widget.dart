@@ -38,7 +38,7 @@ class LocationCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10)],
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
@@ -47,7 +47,7 @@ class LocationCardWidget extends StatelessWidget {
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withOpacity(0.2),
+                  color: Theme.of(context).primaryColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeSmall),
@@ -78,7 +78,7 @@ class LocationCardWidget extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.2),
+                color: Theme.of(context).primaryColor.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
               ),
               padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeSmall),
@@ -99,7 +99,7 @@ class LocationCardWidget extends StatelessWidget {
         Container(
           height: 80,
           decoration: BoxDecoration(
-              color: Theme.of(context).disabledColor.withOpacity(0.05),
+              color: Theme.of(context).disabledColor.withValues(alpha: 0.05),
               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(Dimensions.radiusDefault))
           ),
           padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),

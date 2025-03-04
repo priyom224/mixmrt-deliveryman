@@ -26,7 +26,7 @@ class NotificationStatusChangeBottomSheet extends StatelessWidget {
           Container(
             height: 5, width: 50,
             decoration: BoxDecoration(
-              color: Theme.of(context).hintColor.withOpacity(0.2),
+              color: Theme.of(context).hintColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
             ),
           ),
@@ -69,7 +69,7 @@ class NotificationStatusChangeBottomSheet extends StatelessWidget {
                   Get.back();
                 },
                 buttonText: 'no'.tr,
-                backgroundColor: Theme.of(context).disabledColor.withOpacity(0.5),
+                backgroundColor: Theme.of(context).disabledColor.withValues(alpha: 0.5),
                 fontColor: Theme.of(context).textTheme.bodyLarge!.color,
               ),
             ),

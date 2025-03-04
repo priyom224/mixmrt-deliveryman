@@ -12,7 +12,6 @@ import 'package:sixam_mart_delivery/features/splash/controllers/splash_controlle
 import 'package:sixam_mart_delivery/features/auth/domain/models/delivery_man_body_model.dart';
 import 'package:sixam_mart_delivery/helper/custom_validator_helper.dart';
 import 'package:sixam_mart_delivery/helper/route_helper.dart';
-import 'package:sixam_mart_delivery/util/app_constants.dart';
 import 'package:sixam_mart_delivery/util/dimensions.dart';
 import 'package:sixam_mart_delivery/util/styles.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_app_bar_widget.dart';
@@ -22,7 +21,6 @@ import 'package:sixam_mart_delivery/common/widgets/custom_snackbar_widget.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_text_field_widget.dart';
 import 'package:sixam_mart_delivery/features/auth/widgets/condition_check_box_widget.dart';
 import 'package:sixam_mart_delivery/features/auth/widgets/pass_view_widget.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class DeliveryManRegistrationScreen extends StatefulWidget {
   const DeliveryManRegistrationScreen({super.key});

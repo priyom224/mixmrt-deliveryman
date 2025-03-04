@@ -136,7 +136,7 @@ class CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
             child: Image.asset(widget.prefixImage!, height: 20, width: 20),
           ) : widget.prefixImage == null && widget.prefixIcon != null ? Icon(widget.prefixIcon, size: widget.iconSize) : null,
           suffixIcon: widget.isPassword ? IconButton(
-            icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: Theme.of(context).hintColor.withOpacity(0.3)),
+            icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: Theme.of(context).hintColor.withValues(alpha: 0.3)),
             onPressed: _toggle,
           ) : null,
         ),

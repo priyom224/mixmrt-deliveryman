@@ -230,7 +230,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                       const Expanded(child: SizedBox()),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
-                        decoration: BoxDecoration(color: Theme.of(context).primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(5)),
+                        decoration: BoxDecoration(color: Theme.of(context).primaryColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(5)),
                         child: Text(
                           cod! ? 'cod'.tr : wallet! ? 'wallet'.tr : partialPay! ? 'partially_pay'.tr : offlinePay! ? 'offline_payment'.tr : 'digitally_paid'.tr,
                           style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor),
@@ -485,7 +485,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                     // ) : const SizedBox(),
                     //
                     // Get.find<SplashController>().getModuleConfig(order.moduleType).addOn! ? Divider(
-                    //   thickness: 1, color: Theme.of(context).hintColor.withOpacity(0.5),
+                    //   thickness: 1, color: Theme.of(context).hintColor.withValues(alpha: 0.5),
                     // ) : const SizedBox(),
                     //
                     // Get.find<SplashController>().getModuleConfig(order.moduleType).addOn! ? Row(
@@ -543,7 +543,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
 
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
-                      child: Divider(thickness: 1, color: Theme.of(context).hintColor.withOpacity(0.5)),
+                      child: Divider(thickness: 1, color: Theme.of(context).hintColor.withValues(alpha: 0.5)),
                     ),
 
                     partialPay! ? DottedBorder(
@@ -556,7 +556,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                       radius: const Radius.circular(Dimensions.radiusDefault),
                       child: Ink(
                         padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                        color: !restConfModel ? Theme.of(context).primaryColor.withOpacity(0.05) : Colors.transparent,
+                        color: !restConfModel ? Theme.of(context).primaryColor.withValues(alpha: 0.05) : Colors.transparent,
                         child: Column(children: [
 
                           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -614,7 +614,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                 showDeliveryConfirmImage && controllerOrderModel.orderStatus != 'delivered' ? Container(
                   padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.05),
+                    color: Theme.of(context).primaryColor.withValues(alpha: 0.05),
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(Dimensions.radiusDefault)),
                   ),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -642,7 +642,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                               child: Container(
                                 height: 60, width: 60, alignment: Alignment.center, decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                               ),
                                 child:  Icon(Icons.camera_alt_sharp, color: Theme.of(context).primaryColor, size: 32),
                               ),

@@ -241,8 +241,8 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                  color: Theme.of(context).primaryColor.withOpacity(0.05),
-                  border: Border.all(width: 2, color: Theme.of(context).primaryColor.withOpacity(0.1)),
+                  color: Theme.of(context).primaryColor.withValues(alpha: 0.05),
+                  border: Border.all(width: 2, color: Theme.of(context).primaryColor.withValues(alpha: 0.1)),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -275,8 +275,8 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                  color: Theme.of(context).primaryColor.withOpacity(0.05),
-                  border: Border.all(width: 2, color: Theme.of(context).primaryColor.withOpacity(0.1)),
+                  color: Theme.of(context).primaryColor.withValues(alpha: 0.05),
+                  border: Border.all(width: 2, color: Theme.of(context).primaryColor.withValues(alpha: 0.1)),
                 ),
                 child: Column(children: [
 
@@ -298,8 +298,8 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                  color: Theme.of(context).primaryColor.withOpacity(0.05),
-                  border: Border.all(width: 2, color: Theme.of(context).primaryColor.withOpacity(0.1)),
+                  color: Theme.of(context).primaryColor.withValues(alpha: 0.05),
+                  border: Border.all(width: 2, color: Theme.of(context).primaryColor.withValues(alpha: 0.1)),
                 ),
                 child: Column(children: [
 

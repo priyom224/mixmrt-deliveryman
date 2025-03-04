@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart_delivery/features/cash_in_hand/controllers/cash_in_hand_controller.dart';
 import 'package:sixam_mart_delivery/features/order/domain/models/offline_method_model.dart';
 import 'package:sixam_mart_delivery/helper/responsive_helper.dart';
@@ -23,7 +22,7 @@ class OfflinePaymentButton extends StatelessWidget {
       child: Container(
         width: Dimensions.webMaxWidth,
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.1) : Colors.transparent,
+          color: isSelected ? Theme.of(context).primaryColor.withValues(alpha: 0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
           border: Border.all(color: Theme.of(context).disabledColor, width: 0.3),
         ),

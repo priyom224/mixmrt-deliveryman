@@ -8,7 +8,6 @@ import 'package:sixam_mart_delivery/common/widgets/custom_snackbar_widget.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_text_field_widget.dart';
 import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart_delivery/features/cash_in_hand/controllers/cash_in_hand_controller.dart';
-import 'package:sixam_mart_delivery/features/cash_in_hand/controllers/cash_in_hand_controller.dart';
 import 'package:sixam_mart_delivery/features/order/domain/models/offline_method_model.dart';
 import 'package:sixam_mart_delivery/helper/price_converter_helper.dart';
 import 'package:sixam_mart_delivery/helper/route_helper.dart';
@@ -57,11 +56,10 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
     return Scaffold(
       appBar: CustomAppBarWidget(title: 'offline_payment'.tr),
       body: SafeArea(
-        child: GetBuilder<CashInHandController>(
-            builder: (CashInHandController) {
-              List<MethodInformations>? methodInformation = CashInHandController.offlineMethodList != null ? CashInHandController.offlineMethodList![CashInHandController.selectedOfflineBankIndex].methodInformations! : [];
+        child: GetBuilder<CashInHandController>(builder: (cashInHandController) {
+          List<MethodInformations>? methodInformation = cashInHandController.offlineMethodList != null ? cashInHandController.offlineMethodList![cashInHandController.selectedOfflineBankIndex].methodInformations! : [];
 
-              return CashInHandController.offlineMethodList != null ? Column(children: [
+          return cashInHandController.offlineMethodList != null ? Column(children: [
                 Expanded(child: SingleChildScrollView(
                   child: SizedBox(
                     width: Dimensions.webMaxWidth,
@@ -80,15 +78,15 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
                         height: 170,
                         child: PageView.builder(
                             onPageChanged: (int pageIndex) {
-                              CashInHandController.selectOfflineBank(pageIndex);
-                              CashInHandController.changesMethod();
+                              cashInHandController.selectOfflineBank(pageIndex);
+                              cashInHandController.changesMethod();
                             },
                             scrollDirection: Axis.horizontal,
                             controller: pageController,
-                            itemCount: CashInHandController.offlineMethodList!.length,
+                            itemCount: cashInHandController.offlineMethodList!.length,
                             itemBuilder: (context, index) {
-                              bool selected = CashInHandController.selectedOfflineBankIndex == index;
-                              return bankCard(context, CashInHandController.offlineMethodList, index, selected);
+                              bool selected = cashInHandController.selectedOfflineBankIndex == index;
+                              return bankCard(context, cashInHandController.offlineMethodList, index, selected);
                             }),
                       ),
                       const SizedBox(height: Dimensions.paddingSizeLarge),
@@ -111,7 +109,7 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
                           ),
 
                           ListView.builder(
-                            itemCount: CashInHandController.informationControllerList.length,
+                            itemCount: cashInHandController.informationControllerList.length,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
@@ -120,9 +118,9 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
                                 padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
                                 child: CustomTextFieldWidget(
                                   hintText: methodInformation[i].customerPlaceholder!,
-                                  controller: CashInHandController.informationControllerList[i],
-                                  focusNode: CashInHandController.informationFocusList[i],
-                                  nextFocus: i != CashInHandController.informationControllerList.length-1 ? CashInHandController.informationFocusList[i+1] : _customerNoteNode,
+                                  controller: cashInHandController.informationControllerList[i],
+                                  focusNode: cashInHandController.informationFocusList[i],
+                                  nextFocus: i != cashInHandController.informationControllerList.length-1 ? cashInHandController.informationFocusList[i+1] : _customerNoteNode,
                                   showTitle: true,
                                 ),
                               );
@@ -137,28 +135,27 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
                   ),
                 )),
 
-                completeButton(CashInHandController, methodInformation)
+                completeButton(cashInHandController, methodInformation)
 
 
               ]) : const Center(child: CircularProgressIndicator());
-            }
-        ),
+        }),
       ),
     );
   }
 
-  Widget completeButton(CashInHandController CashInHandController, List<MethodInformations>? methodInformation, ) {
+  Widget completeButton(CashInHandController cashInHandController, List<MethodInformations>? methodInformation, ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeSmall),
       child: CustomButtonWidget(
         buttonText: 'complete'.tr,
-        isLoading: CashInHandController.isLoading,
+        isLoading: cashInHandController.isLoading,
         onPressed: () async {
           bool complete = false;
           String text = '';
           for(int i=0; i<methodInformation!.length; i++){
             if(methodInformation[i].isRequired!) {
-              if(CashInHandController.informationControllerList[i].text.isEmpty){
+              if(cashInHandController.informationControllerList[i].text.isEmpty){
                 complete = false;
                 text = methodInformation[i].customerPlaceholder!;
                 break;
@@ -171,7 +168,7 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
           }
 
           if(complete) {
-            String methodId = CashInHandController.offlineMethodList![CashInHandController.selectedOfflineBankIndex].id.toString();
+            String methodId = cashInHandController.offlineMethodList![cashInHandController.selectedOfflineBankIndex].id.toString();
 
 
             Map<String, String> data = {
@@ -182,11 +179,11 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
 
             for(int i=0; i<methodInformation.length; i++){
               data.addAll({
-                methodInformation[i].customerInput! : CashInHandController.informationControllerList[i].text,
+                methodInformation[i].customerInput! : cashInHandController.informationControllerList[i].text,
               });
             }
 
-            CashInHandController.saveOfflineInfo(jsonEncode(data)).then((success) {
+            cashInHandController.saveOfflineInfo(jsonEncode(data)).then((success) {
               if(success){
                 Get.offAllNamed(RouteHelper.getInitialRoute());
               }
@@ -205,7 +202,7 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
   Widget bankCard(BuildContext context, List<OfflineMethodModel>? offlineMethodList, int index, bool selected) {
     return Container(
       decoration: BoxDecoration(
-        color: selected ? Theme.of(context).cardColor : Theme.of(context).primaryColor.withOpacity(0.1),
+        color: selected ? Theme.of(context).cardColor : Theme.of(context).primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
         boxShadow: selected ? const [BoxShadow(color: Colors.black12, blurRadius: 10)] : [],
       ),
@@ -234,7 +231,7 @@ class _OfflinePaymentScreenState extends State<OfflinePaymentScreen> {
                 child: Row(children: [
                   Text(
                     '${offlineMethodList[index].methodFields![i].inputName!.toString().replaceAll('_', ' ')} : ',
-                    style: robotoMedium.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.5)),
+                    style: robotoMedium.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color!.withValues(alpha: 0.5)),
                   ),
                   Text(offlineMethodList[index].methodFields![i].inputData!, style: robotoMedium),
                 ]),
