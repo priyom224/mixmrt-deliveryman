@@ -5,7 +5,7 @@ class AppConstants {
   static const String appName = 'MIXMRT Delivery';
   static const double appVersion = 2.12; ///Flutter sdk 3.24.5
 
-  static String baseUrl = 'https://dash.mixmrt.com/zm';
+  static String baseUrl = 'https://dev.mixmrt.com';
 
   static void setBaseUrl(String url) {
     baseUrl = url;

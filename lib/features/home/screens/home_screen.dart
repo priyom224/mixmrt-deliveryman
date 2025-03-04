@@ -293,6 +293,29 @@ class HomeScreen extends StatelessWidget {
                   ),
 
                 ]),
+              ) : profileController.profileModel != null && ((profileController.profileModel?.earnings == 0 && profileController.profileModel!.cashInHands! > 0)) ? Container(
+                height: 120, width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                  color: Theme.of(context).primaryColor.withOpacity(0.05),
+                  border: Border.all(width: 2, color: Theme.of(context).primaryColor.withOpacity(0.1)),
+                ),
+                child: Column(children: [
+
+                  Text('Transfer collect cash to admin'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
+                  const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+
+                  CustomButtonWidget(
+                    isLoading: profileController.isLoading,
+                    height: 40, margin: const EdgeInsets.symmetric(horizontal: 50),
+                    buttonText: 'transfer'.tr,
+                    onPressed: (){
+                      profileController.transferCollectCashToStore(dmId: profileController.profileModel!.id.toString());
+                    },
+                  ),
+
+                ]),
               ) : const SizedBox(),
 
             ]);
