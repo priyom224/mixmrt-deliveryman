@@ -597,16 +597,33 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                       )),
                       Text('(+) ${PriceConverterHelper.convertPrice(deliveryCharge)}', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor),),
                     ]),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
+                      child: Divider(thickness: 1, color: Theme.of(context).hintColor.withValues(alpha: 0.5)),
+                    ),
 
-                    // !partialPay ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    //   Text('total_amount'.tr, style: robotoMedium.copyWith(
-                    //     fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor,
-                    //   )),
-                    //   Text(
-                    //     PriceConverter.convertPrice(total),
-                    //     style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor),
-                    //   ),
-                    // ]) : const SizedBox(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('delivery_man_tips'.tr, style: robotoRegular),
+                        Text('(+) ${PriceConverterHelper.convertPrice(dmTips)}', style: robotoRegular),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
+                      child: Divider(thickness: 1, color: Theme.of(context).hintColor.withValues(alpha: 0.5)),
+                    ),
+
+
+                    !partialPay ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('total_amount'.tr, style: robotoMedium.copyWith(
+                        fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor,
+                      )),
+                      Text(
+                        PriceConverterHelper.convertPrice(total),
+                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor),
+                      ),
+                    ]) : const SizedBox(),
 
                   ]),
                 )),

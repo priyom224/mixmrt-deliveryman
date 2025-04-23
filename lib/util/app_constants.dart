@@ -3,7 +3,7 @@ import 'package:sixam_mart_delivery/util/images.dart';
 
 class AppConstants {
   static const String appName = 'MIXMRT Delivery';
-  static const double appVersion = 2.12; ///Flutter sdk 3.24.5
+  static const double appVersion = 3.0; ///Flutter sdk 3.27.4
 
   static String baseUrl = 'https://dev.mixmrt.com';
 

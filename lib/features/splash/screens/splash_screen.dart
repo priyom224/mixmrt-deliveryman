@@ -106,17 +106,21 @@ class SplashScreenState extends State<SplashScreen> {
     return null;
   }
 
-  /// Check if the country is supported (Malawi, Tanzania, Zambia)
+  /// Check if the country is supported (Malawi, Tanzania, Zimbabwe,  Zambia)
   bool _isSupportedCountry(String countryCode) {
-    return ['MW', 'TZ', 'ZM'].contains(countryCode);
+    return ['MW', 'TZ', 'ZM', 'ZW'].contains(countryCode);
   }
 
+  /// Set the base URL based on the detected or selected country
   void _setBaseUrl(String countryCode) {
     switch (countryCode) {
       case 'MW':
         AppConstants.setBaseUrl('https://dev.mixmrt.com');
         break;
       case 'TZ':
+        AppConstants.setBaseUrl('https://dev.mixmrt.com');
+        break;
+      case 'ZW':
         AppConstants.setBaseUrl('https://dev.mixmrt.com');
         break;
       case 'ZM':
@@ -169,6 +173,14 @@ class SplashScreenState extends State<SplashScreen> {
                 dialCode: '+255',
                 flagUrl: 'https://www.countryflags.com/wp-content/uploads/tanzania-flag-png-large.png',
                 countryCode: 'TZ',
+              ),
+              const Divider(),
+
+              _buildCountryTile(
+                countryName: 'Zimbabwe',
+                dialCode: '+263',
+                flagUrl: 'https://www.countryflags.com/wp-content/uploads/zimbabwe-flag-png-large.png',
+                countryCode: 'ZW',
               ),
               const Divider(),
 

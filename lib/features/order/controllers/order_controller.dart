@@ -120,12 +120,14 @@ class OrderController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> getCompletedOrders(int offset) async {
+  Future<void> getCompletedOrders(int offset, {bool isUpdate = true}) async {
     if(offset == 1) {
       _offsetList = [];
       _offset = 1;
       _completedOrderList = null;
-      update();
+      if(isUpdate){
+        update();
+      }
     }
     if (!_offsetList.contains(offset)) {
       _offsetList.add(offset);

@@ -5,14 +5,25 @@ import 'package:sixam_mart_delivery/features/order/widgets/history_order_widget.
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OrderScreen extends StatelessWidget {
+class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final ScrollController scrollController = ScrollController();
-    Get.find<OrderController>().getCompletedOrders(1);
+  State<OrderScreen> createState() => _OrderScreenState();
+}
 
+class _OrderScreenState extends State<OrderScreen> {
+
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    Get.find<OrderController>().getCompletedOrders(1, isUpdate: false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
 
       appBar: CustomAppBarWidget(title: 'my_orders'.tr, isBackButtonExist: false),

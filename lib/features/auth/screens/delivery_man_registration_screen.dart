@@ -335,7 +335,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                                     height: 120, width: double.infinity,
                                     child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                                       Icon(Icons.camera_alt, color: Theme.of(context).disabledColor, size: 38),
-                                      Text('upload_address_proof_image'.tr, style: robotoMedium.copyWith(color: Theme.of(context).disabledColor)),
+                                      Text('upload_address_proof_image'.tr, style: robotoMedium.copyWith(color: Theme.of(context).disabledColor), textAlign: TextAlign.center),
                                     ]),
                                   ),
                                 ),

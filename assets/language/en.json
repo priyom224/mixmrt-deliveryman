@@ -422,9 +422,9 @@
   "back_press_again_to_exit": "Back press again to exit",
 
   "write_your_address" : "Write your address",
-  "upload_address_proof_image" : "Upload Address Proof Image",
+  "upload_address_proof_image" : "Add proof of address, police clearance and other document",
   "enter_delivery_man_address" : "Enter delivery man address",
-  "please_upload_address_proof_image" : "Please upload address proof image",
+  "please_upload_address_proof_image" : "Please Add proof of address, police clearance and other document",
   "transfer_collect_cash_to_store" : "Transfer Collect Cash to Store",
   "transfer" : "Transfer",
   "collect_cash_transferred_to_store" : "Collect cash transferred to store",
