@@ -5,6 +5,7 @@ import 'package:sixam_mart_delivery/features/language/widgets/language_bottom_sh
 import 'package:sixam_mart_delivery/features/profile/controllers/profile_controller.dart';
 import 'package:sixam_mart_delivery/features/profile/widgets/notification_status_change_bottom_sheet.dart';
 import 'package:sixam_mart_delivery/common/controllers/theme_controller.dart';
+import 'package:sixam_mart_delivery/features/ticket/screens/ticket_screen.dart';
 import 'package:sixam_mart_delivery/helper/route_helper.dart';
 import 'package:sixam_mart_delivery/util/app_constants.dart';
 import 'package:sixam_mart_delivery/util/dimensions.dart';
@@ -87,6 +88,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               ProfileButtonWidget(icon: Icons.chat_bubble, title: 'conversation'.tr, onTap: () {
                 Get.toNamed(RouteHelper.getConversationListRoute());
+              }),
+              const SizedBox(height: Dimensions.paddingSizeSmall),
+
+              ProfileButtonWidget(icon: Icons.add_moderator, title: 'Ticket'.tr, onTap: () {
+                Get.to(() => const TicketScreen());
               }),
               const SizedBox(height: Dimensions.paddingSizeSmall),
 

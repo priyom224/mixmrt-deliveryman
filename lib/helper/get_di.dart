@@ -61,6 +61,11 @@ import 'package:sixam_mart_delivery/features/splash/domain/repositories/splash_r
 import 'package:sixam_mart_delivery/features/splash/domain/repositories/splash_repository_interface.dart';
 import 'package:sixam_mart_delivery/features/splash/domain/services/splash_service.dart';
 import 'package:sixam_mart_delivery/features/splash/domain/services/splash_service_interface.dart';
+import 'package:sixam_mart_delivery/features/ticket/controllers/ticket_controller.dart';
+import 'package:sixam_mart_delivery/features/ticket/domain/repositories/ticket_repository.dart';
+import 'package:sixam_mart_delivery/features/ticket/domain/repositories/ticket_repository_interface.dart';
+import 'package:sixam_mart_delivery/features/ticket/domain/services/ticket_service.dart';
+import 'package:sixam_mart_delivery/features/ticket/domain/services/ticket_service_interface.dart';
 import 'package:sixam_mart_delivery/util/app_constants.dart';
 import 'package:sixam_mart_delivery/features/language/domain/models/language_model.dart';
 import 'package:flutter/services.dart';
@@ -73,26 +78,6 @@ Future<Map<String, Map<String, String>>> init() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   Get.lazyPut(() => sharedPreferences);
   Get.lazyPut(() => ApiClient(appBaseUrl: AppConstants.baseUrl, sharedPreferences: Get.find()), fenix: true);
-
-  /// Repository
-  //Get.lazyPut(() => SplashRepo(sharedPreferences: Get.find(), apiClient: Get.find()));
-  //Get.lazyPut(() => LanguageRepo());
- // Get.lazyPut(() => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
-  //Get.lazyPut(() => OrderRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
-  //Get.lazyPut(() => NotificationRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
-  //Get.lazyPut(() => ChatRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
-  //Get.lazyPut(() => DisbursementRepo(apiClient: Get.find()));
-
-  /// Controller
-  // Get.lazyPut(() => ThemeController(sharedPreferences: Get.find()));
-  //Get.lazyPut(() => SplashController(splashRepo: Get.find()));
-  //Get.lazyPut(() => LocalizationController(sharedPreferences: Get.find(), apiClient: Get.find()));
-  //Get.lazyPut(() => LanguageController(sharedPreferences: Get.find()));
-  //Get.lazyPut(() => AuthController(authRepo: Get.find()));
-  //Get.lazyPut(() => OrderController(orderRepo: Get.find()));
-  //Get.lazyPut(() => NotificationController(notificationRepo: Get.find()));
-  //Get.lazyPut(() => ChatController(chatRepo: Get.find()));
-  //Get.lazyPut(() => DisbursementController(disbursementRepo: Get.find()));
 
   /// Repository Interface
   HtmlRepositoryInterface htmlRepositoryInterface = HtmlRepository(apiClient: Get.find());
@@ -131,6 +116,9 @@ Future<Map<String, Map<String, String>>> init() async {
   OrderRepositoryInterface orderRepositoryInterface = OrderRepository(apiClient: Get.find(), sharedPreferences: Get.find());
   Get.lazyPut(() => orderRepositoryInterface);
 
+  TicketRepositoryInterface ticketRepositoryInterface = TicketRepository(apiClient: Get.find());
+  Get.lazyPut(() => ticketRepositoryInterface);
+
   /// Service Interface
   HtmlServiceInterface htmlServiceInterface = HtmlService(htmlRepositoryInterface: Get.find());
   Get.lazyPut(() => htmlServiceInterface);
@@ -168,6 +156,9 @@ Future<Map<String, Map<String, String>>> init() async {
   OrderServiceInterface orderServiceInterface = OrderService(orderRepositoryInterface: Get.find());
   Get.lazyPut(() => orderServiceInterface);
 
+  TicketServiceInterface ticketServiceInterface = TicketService(ticketRepositoryInterface: Get.find());
+  Get.lazyPut(() => ticketServiceInterface);
+
   /// Service
   Get.lazyPut(() => HtmlService(htmlRepositoryInterface: Get.find()));
   Get.lazyPut(() => DisbursementService(disbursementRepositoryInterface: Get.find()));
@@ -181,6 +172,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => AddressService(addressRepositoryInterface: Get.find()));
   Get.lazyPut(() => AuthService(authRepositoryInterface: Get.find()));
   Get.lazyPut(() => OrderService(orderRepositoryInterface: Get.find()));
+  Get.lazyPut(() => TicketService(ticketRepositoryInterface: Get.find()));
 
   /// Controller
   Get.lazyPut(() => HtmlController(htmlServiceInterface: Get.find()));
@@ -196,6 +188,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => AddressController(addressServiceInterface: Get.find()));
   Get.lazyPut(() => AuthController(authServiceInterface: Get.find()));
   Get.lazyPut(() => OrderController(orderServiceInterface: Get.find()));
+  Get.lazyPut(() => TicketController(ticketServiceInterface: Get.find()));
 
   /// Retrieving localized data
   Map<String, Map<String, String>> languages = {};

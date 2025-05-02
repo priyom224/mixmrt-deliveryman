@@ -1,15 +1,20 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sixam_mart_delivery/api/api_client.dart';
+import 'package:sixam_mart_delivery/features/auth/domain/models/account_recovery_model.dart';
 import 'package:sixam_mart_delivery/features/auth/domain/models/delivery_man_body_model.dart';
 import 'package:sixam_mart_delivery/common/models/response_model.dart';
 import 'package:sixam_mart_delivery/features/auth/domain/models/vehicle_model.dart';
+import 'package:sixam_mart_delivery/features/auth/screens/account_recovery_screen.dart';
 import 'package:sixam_mart_delivery/helper/route_helper.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_snackbar_widget.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sixam_mart_delivery/features/auth/domain/services/auth_service_interface.dart';
 import 'package:sixam_mart_delivery/util/app_constants.dart';
+import 'package:http/http.dart' as http;
 
 class AuthController extends GetxController implements GetxService {
   final AuthServiceInterface authServiceInterface;
@@ -92,19 +97,26 @@ class AuthController extends GetxController implements GetxService {
   bool _notificationLoading = false;
   bool get notificationLoading => _notificationLoading;
 
+  DeliveryMan? _deliveryMan;
+  DeliveryMan? get deliveryMan => _deliveryMan;
+
   void initData() {
     _pickedAgreement = null;
   }
 
-  Future<ResponseModel> login(String phone, String password) async {
+  Future<ResponseModel?> login(String phone, String password) async {
     _isLoading = true;
     update();
     Response response = await authServiceInterface.login(phone, password);
-    ResponseModel responseModel;
+    ResponseModel? responseModel;
     if (response.statusCode == 200) {
       authServiceInterface.saveUserToken(response.body['token'], response.body['topic'], response.body['parcel_topic']);
       await authServiceInterface.updateToken();
       responseModel = ResponseModel(true, 'successful');
+    }else if(response.statusCode == 420){
+      _deliveryMan = DeliveryMan.fromJson(response.body['delivery_man']);
+      Get.to(() => const AccountRecoveryScreen());
+      responseModel = ResponseModel(false, 'Account Recovery');
     } else {
       responseModel = ResponseModel(false, response.statusText);
     }
@@ -139,6 +151,20 @@ class AuthController extends GetxController implements GetxService {
 
   void setVehicleIndex(int? index, bool notify) {
     _vehicleIndex = index;
+    if(notify) {
+      update();
+    }
+  }
+
+  void setAccRecVehicleIndex(int? id, bool notify) {
+    int index0 = 0;
+    for(int index=0; index<_vehicles!.length; index++) {
+      if(_vehicles?[index].id == id) {
+        index0 = index;
+        break;
+      }
+    }
+    _vehicleIndex = index0;
     if(notify) {
       update();
     }
@@ -274,6 +300,69 @@ class AuthController extends GetxController implements GetxService {
   void removeProofAddressImage(int index) {
     _pickedProofAddress.removeAt(index);
     update();
+  }
+
+  void saveDmImage(String imageUrl) async {
+    XFile? xFile = await urlToXFile(imageUrl);
+    if(xFile != null) {
+      _pickedImage = xFile;
+    }
+    Future.delayed(const Duration(milliseconds: 500), () {
+      update();
+    });
+  }
+
+  void clearDmImage() {
+    _pickedImage = null;
+  }
+
+  void saveProofAddressImage(String imageUrl) async {
+    XFile? xFile = await urlToXFile(imageUrl);
+    if(xFile != null) {
+      _pickedProofAddress.add(xFile);
+    }
+    Future.delayed(const Duration(milliseconds: 500), () {
+      update();
+    });
+  }
+
+  void clearProofAddressImage() {
+    _pickedProofAddress.clear();
+  }
+
+  void saveIdentityImage(String imageUrl) async {
+    XFile? xFile = await urlToXFile(imageUrl);
+    if(xFile != null) {
+      _pickedIdentities.add(xFile);
+    }
+    Future.delayed(const Duration(milliseconds: 500), () {
+      update();
+    });
+  }
+
+  void clearIdentityImage() {
+    _pickedIdentities.clear();
+  }
+
+  Future<XFile?> urlToXFile(String imageUrl) async {
+    try {
+      final tempDir = await getTemporaryDirectory();
+      final filePath = '${tempDir.path}/${imageUrl.split('/').last}';
+
+      final response = await http.get(Uri.parse(imageUrl));
+      if (response.statusCode == 200) {
+        final file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+
+        return XFile(filePath);
+      } else {
+        showCustomSnackBar('${'Failed to download file'.tr} ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      showCustomSnackBar('Error occurred while converting URL to XFile: $e');
+      return null;
+    }
   }
 
   void showHidePass({bool isUpdate = true}){

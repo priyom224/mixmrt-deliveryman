@@ -46,6 +46,7 @@ dependencies:
   just_the_tooltip: ^0.0.12
   file_picker: ^9.0.2
   flutter_svg: ^2.0.10+1
+  dropdown_button2: ^2.3.9
 
 dependency_overrides:
   collection: ^1.19.0

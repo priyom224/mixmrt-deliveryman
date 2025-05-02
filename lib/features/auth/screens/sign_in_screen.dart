@@ -156,7 +156,7 @@ class SignInScreen extends StatelessWidget {
       showCustomSnackBar('password_should_be'.tr);
     }else {
       authController.login(numberWithCountryCode, password).then((status) async {
-        if (status.isSuccess) {
+        if (status?.isSuccess ?? false) {
           if (authController.isActiveRememberMe) {
             authController.saveUserNumberAndPassword(phone, password, countryCode);
           } else {
@@ -165,7 +165,7 @@ class SignInScreen extends StatelessWidget {
           await Get.find<ProfileController>().getProfile();
           Get.offAllNamed(RouteHelper.getInitialRoute());
         }else {
-          showCustomSnackBar(status.message);
+          showCustomSnackBar(status?.message);
         }
       });
     }

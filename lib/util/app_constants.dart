@@ -67,6 +67,10 @@ class AppConstants {
   static const String sendMessageUri = '/api/v1/delivery-man/message/send';
   static const String searchConversationListUri = '/api/v1/delivery-man/message/search-list';
 
+  ///Ticket System
+  static const String ticketCategoryUri = '/api/v1/get-ticket-categories';
+  static const String ticketUri = '/api/v1/tickets';
+
   // Shared Key
   static const String theme = 'sixam_mart_delivery_theme';
   static const String token = 'sixam_mart_delivery_token';

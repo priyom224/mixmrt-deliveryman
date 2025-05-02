@@ -10,6 +10,8 @@ class DeliveryManBodyModel {
   String? zoneId;
   String? vehicleId;
   String? dmAddress;
+  int? dmPreviousId;
+  int? isForResubmit;
 
   DeliveryManBodyModel({
     this.fName,
@@ -23,6 +25,8 @@ class DeliveryManBodyModel {
     this.zoneId,
     this.vehicleId,
     this.dmAddress,
+    this.dmPreviousId,
+    this.isForResubmit,
   });
 
   DeliveryManBodyModel.fromJson(Map<String, dynamic> json) {
@@ -37,6 +41,8 @@ class DeliveryManBodyModel {
     zoneId = json['zone_id'];
     vehicleId = json['vehicle_id'];
     dmAddress = json['dm_address'];
+    dmPreviousId = json['dm_previous_id'];
+    isForResubmit = json['is_for_resubmit'];
   }
 
   Map<String, String> toJson() {
@@ -52,6 +58,8 @@ class DeliveryManBodyModel {
     data['zone_id'] = zoneId!;
     data['vehicle_id'] = vehicleId!;
     data['dm_address'] = dmAddress!;
+    data['dm_previous_id'] = dmPreviousId.toString();
+    data['is_for_resubmit'] = isForResubmit.toString();
     return data;
   }
 }

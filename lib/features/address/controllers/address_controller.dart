@@ -64,9 +64,25 @@ class AddressController extends GetxController implements GetxService {
     update();
   }
 
-  void setZoneIndex(int? index) {
+  void setZoneIndex(int? index, {bool isUpdate = true}) {
     _selectedZoneIndex = index;
-    update();
+    if(isUpdate){
+      update();
+    }
+  }
+
+  void setAccRecZoneIndex(int? id, bool notify) {
+    int index0 = 0;
+    for(int index=0; index<_zoneList!.length; index++) {
+      if(_zoneList?[index].id == id) {
+        index0 = index;
+        break;
+      }
+    }
+    _selectedZoneIndex = index0;
+    if(notify) {
+      update();
+    }
   }
 
   void _setLocation(LatLng location) async {

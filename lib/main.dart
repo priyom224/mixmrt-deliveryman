@@ -108,9 +108,19 @@ class MyApp extends StatelessWidget {
             getPages: RouteHelper.routes,
             defaultTransition: Transition.topLevel,
             transitionDuration: const Duration(milliseconds: 500),
-            builder: (BuildContext context, widget) {
+            /*builder: (BuildContext context, widget) {
               return MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1)), child: widget!);
-            }
+            }*/
+            builder: (BuildContext context, widget) {
+            return MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1)), child: Material(
+              child: SafeArea(
+                top: false, bottom: GetPlatform.isAndroid,
+                child: Stack(children: [
+                  widget!,
+                ]),
+              ),
+            ));
+            },
           );
         });
       });
