@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sixam_mart_delivery/common/models/response_model.dart';
+import 'package:sixam_mart_delivery/features/order/domain/models/transaction_report_model.dart';
 import 'package:sixam_mart_delivery/features/profile/controllers/profile_controller.dart';
 import 'package:sixam_mart_delivery/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart_delivery/api/api_client.dart';
@@ -66,6 +67,9 @@ class OrderController extends GetxController implements GetxService {
   
   List<XFile> _pickedPrescriptions = [];
   List<XFile> get pickedPrescriptions => _pickedPrescriptions;
+
+  List<Transaction>? _transactionReport;
+  List<Transaction>? get transactionReport => _transactionReport;
 
   void changeDeliveryImageStatus({bool isUpdate = true}){
     _showDeliveryImageField = !_showDeliveryImageField;
@@ -260,6 +264,15 @@ class OrderController extends GetxController implements GetxService {
     if(otp != '') {
       update();
     }
+  }
+
+  Future<void> getTransactionReport({required int dmId}) async {
+    List<Transaction>? transaction = await orderServiceInterface.getTransactionReport(dmId);
+    if(transaction != null) {
+      _transactionReport = [];
+      _transactionReport!.addAll(transaction);
+    }
+    update();
   }
   
 }

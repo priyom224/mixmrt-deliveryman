@@ -116,7 +116,7 @@ Future<Map<String, Map<String, String>>> init() async {
   OrderRepositoryInterface orderRepositoryInterface = OrderRepository(apiClient: Get.find(), sharedPreferences: Get.find());
   Get.lazyPut(() => orderRepositoryInterface);
 
-  TicketRepositoryInterface ticketRepositoryInterface = TicketRepository(apiClient: Get.find());
+  TicketRepositoryInterface ticketRepositoryInterface = TicketRepository(apiClient: Get.find(), sharedPreferences: Get.find());
   Get.lazyPut(() => ticketRepositoryInterface);
 
   /// Service Interface

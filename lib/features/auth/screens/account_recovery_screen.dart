@@ -86,15 +86,16 @@ class _AccountRecoveryScreenState extends State<AccountRecoveryScreen> {
       Get.find<AuthController>().showHidePass(isUpdate: false);
     }
 
-    Get.find<AddressController>().getZoneList();
-    Get.find<AuthController>().getVehicleList();
+    Get.find<AddressController>().getZoneList().then((value) {
+      Get.find<AuthController>().getVehicleList();
+      Get.find<AuthController>().setDMTypeIndex(deliveryMan!.earning!, false);
+      Get.find<AddressController>().setAccRecZoneIndex(deliveryMan.zoneId, false);
+      authController.setAccRecVehicleIndex(deliveryMan.vehicleId, false);
+      authController.setIdentityTypeIndex(deliveryMan.identityType, false);
+      Get.find<AuthController>().dmStatusChange(0.4, isUpdate: false);
+      Get.find<AuthController>().validPassCheck('', isUpdate: false);
+    });
 
-    Get.find<AuthController>().setDMTypeIndex(deliveryMan!.earning!, false);
-    Get.find<AddressController>().setAccRecZoneIndex(deliveryMan.zoneId, false);
-    authController.setAccRecVehicleIndex(deliveryMan.vehicleId, false);
-    authController.setIdentityTypeIndex(deliveryMan.identityType, false);
-    Get.find<AuthController>().dmStatusChange(0.4, isUpdate: false);
-    Get.find<AuthController>().validPassCheck('', isUpdate: false);
   }
 
   void _splitPhone(String? phone) async {

@@ -1,5 +1,6 @@
 import 'package:sixam_mart_delivery/api/api_client.dart';
 import 'package:sixam_mart_delivery/features/order/domain/models/ignore_model.dart';
+import 'package:sixam_mart_delivery/features/order/domain/models/transaction_report_model.dart';
 import 'package:sixam_mart_delivery/features/order/domain/models/update_status_body_model.dart';
 import 'package:sixam_mart_delivery/interface/repository_interface.dart';
 
@@ -12,4 +13,5 @@ abstract class OrderRepositoryInterface implements RepositoryInterface {
   Future<dynamic> acceptOrder(int? orderID);
   List<IgnoreModel> getIgnoreList();
   void setIgnoreList(List<IgnoreModel> ignoreList);
+  Future<List<Transaction>?> getTransactionReport(int dmId);
 }

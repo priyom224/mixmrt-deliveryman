@@ -1,7 +1,9 @@
 import 'package:sixam_mart_delivery/common/widgets/custom_bottom_sheet_widget.dart';
 import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
+import 'package:sixam_mart_delivery/features/cash_in_hand/screens/transaction_history_screen.dart';
 import 'package:sixam_mart_delivery/features/language/controllers/language_controller.dart';
 import 'package:sixam_mart_delivery/features/language/widgets/language_bottom_sheet_widget.dart';
+import 'package:sixam_mart_delivery/features/order/screens/order_transaction_screen.dart';
 import 'package:sixam_mart_delivery/features/profile/controllers/profile_controller.dart';
 import 'package:sixam_mart_delivery/features/profile/widgets/notification_status_change_bottom_sheet.dart';
 import 'package:sixam_mart_delivery/common/controllers/theme_controller.dart';
@@ -102,6 +104,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Get.toNamed(RouteHelper.getCashInHandRoute());
                 }),
               ) : const SizedBox(),
+
+              ProfileButtonWidget(icon: Icons.attach_money_outlined, title: 'Transaction Report'.tr, onTap: () {
+                Get.to(() => const OrderTransactionScreen());
+              }),
+              const SizedBox(height: Dimensions.paddingSizeSmall),
 
               //if(Get.find<SplashController>().configModel!.disbursementType == 'automated' && profileController.profileModel!.type != 'store_wise' && profileController.profileModel!.earnings != 0)
                 Column(children: [

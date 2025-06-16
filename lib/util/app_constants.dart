@@ -59,6 +59,7 @@ class AppConstants {
 
   //Phase 4 part 1
   static const String transferCollectCashToStoreUri = '/api/v1/delivery-man/transfer-collected-cash-to-store';
+  static const String transactionReportUri = '/api/v1/delivery-man/get-dm-transaction-report';
 
 
   //chat url

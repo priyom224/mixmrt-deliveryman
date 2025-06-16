@@ -6,6 +6,7 @@ import 'package:sixam_mart_delivery/features/order/domain/models/ignore_model.da
 import 'package:sixam_mart_delivery/features/order/domain/models/order_cancellation_body.dart';
 import 'package:sixam_mart_delivery/features/order/domain/models/order_details_model.dart';
 import 'package:sixam_mart_delivery/features/order/domain/models/order_model.dart';
+import 'package:sixam_mart_delivery/features/order/domain/models/transaction_report_model.dart';
 import 'package:sixam_mart_delivery/features/order/domain/models/update_status_body_model.dart';
 import 'package:sixam_mart_delivery/features/order/domain/repositories/order_repository_interface.dart';
 import 'package:sixam_mart_delivery/features/order/domain/services/order_service_interface.dart';
@@ -103,6 +104,11 @@ class OrderService implements OrderServiceInterface {
       multiParts.add(MultipartBody('order_proof[]', file));
     }
     return multiParts;
+  }
+
+  @override
+  Future<List<Transaction>?> getTransactionReport(int dmId) async {
+    return await orderRepositoryInterface.getTransactionReport(dmId);
   }
 
 }

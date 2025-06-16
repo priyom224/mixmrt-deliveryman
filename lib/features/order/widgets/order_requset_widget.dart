@@ -185,7 +185,7 @@ class OrderRequestWidget extends StatelessWidget {
 
                   (Get.find<SplashController>().configModel!.showDmEarning! && Get.find<ProfileController>().profileModel != null
                       && Get.find<ProfileController>().profileModel!.earnings == 1) ? Text(
-                    PriceConverterHelper.convertPrice(orderModel.originalDeliveryCharge! + orderModel.dmTips!),
+                    PriceConverterHelper.convertPrice(orderModel.deliveryCharge! + orderModel.dmTips!),
                     style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge),
                   ) : const SizedBox(),
                   const SizedBox(height: Dimensions.paddingSizeExtraSmall),

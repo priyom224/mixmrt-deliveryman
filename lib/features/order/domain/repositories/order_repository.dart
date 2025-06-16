@@ -7,6 +7,7 @@ import 'package:sixam_mart_delivery/features/order/domain/models/ignore_model.da
 import 'package:sixam_mart_delivery/features/order/domain/models/order_cancellation_body.dart';
 import 'package:sixam_mart_delivery/features/order/domain/models/order_details_model.dart';
 import 'package:sixam_mart_delivery/features/order/domain/models/order_model.dart';
+import 'package:sixam_mart_delivery/features/order/domain/models/transaction_report_model.dart';
 import 'package:sixam_mart_delivery/features/order/domain/models/update_status_body_model.dart';
 import 'package:sixam_mart_delivery/features/order/domain/repositories/order_repository_interface.dart';
 import 'package:sixam_mart_delivery/util/app_constants.dart';
@@ -125,6 +126,17 @@ class OrderRepository implements OrderRepositoryInterface {
 
   String _getUserToken() {
     return sharedPreferences.getString(AppConstants.token) ?? "";
+  }
+
+  @override
+  Future<List<Transaction>?> getTransactionReport(int dmId) async {
+    List<Transaction>? transactionList;
+    Response response = await apiClient.getData('${AppConstants.transactionReportUri}?token=${_getUserToken()}&dm_id=$dmId');
+    if (response.statusCode == 200) {
+      TransactionReportModel transactionReportModel = TransactionReportModel.fromJson(response.body);
+      transactionList = transactionReportModel.orderTransactions?.data;
+    }
+    return transactionList;
   }
 
   @override
